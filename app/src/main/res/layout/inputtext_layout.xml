@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="14sp"
+        android:fontFamily="@font/redhatdisplay_medium"
+        android:textStyle="bold"
+        android:textColor="@color/black_river_falls"
+
+        android:text="@string/tvDummyTitle"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/tvTitle"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        android:layout_marginVertical="10dp"
+        android:background="@drawable/bg_circular_rectangle_electriceel_iwhite">
+
+        <EditText
+            android:id="@+id/etInput"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:paddingHorizontal="10dp"
+            android:drawablePadding="5dp"
+            android:drawableStart="@drawable/ic_mail"
+            android:background="@null"
+            android:focusable="true"
+            android:textColor="@color/astrochopus_grey"
+            android:textSize="18sp"
+            android:textColorHint="@color/roman_silver"
+            android:focusableInTouchMode="true"/>
+
+        <ImageView
+            android:id="@+id/ivAction"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_reveal_password"
+            android:layout_marginEnd="12dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:layout_constraintTop_toTopOf="@+id/etInput"
+            app:layout_constraintBottom_toBottomOf="@+id/etInput"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tvWarning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/clEditText"
+        app:layout_constraintTop_toBottomOf="@+id/clEditText"
+        android:fontFamily="@font/redhatdisplay_regular"
+        android:textSize="14sp"
+        android:text="@string/tvInputTextError"
+        android:textColor="@color/sunburnt_cyclops"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

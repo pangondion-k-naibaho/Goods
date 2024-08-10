@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Goods</string>
+    <string name="tvLoginTitle">Welcome back!</string>
+    <string name="tvLoginDesc">You\'ve been missed,\nPlease sign in your account.</string>
+    <string name="tvDummyTitle">Dummy Title</string>
+    <string name="tvInputTextError">This form is required</string>
+    <string name="tvETHintEmail">Email</string>
+    <string name="tvETHintPassword">Password</string>
+    <string name="btnTxtLogin">Login</string>
+</resources>

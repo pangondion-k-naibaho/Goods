@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Main Content View -->
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.activities.login.LoginActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clBanner"
+            android:layout_width="match_parent"
+            android:layout_height="320dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/login_banner">
+
+            <ImageView
+                android:id="@+id/ivAppsLogo"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/goods_logo"
+                android:contentDescription="@null"/>
+
+            <TextView
+                android:id="@+id/tvLoginTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivAppsLogo"
+                android:textSize="25sp"
+                android:fontFamily="@font/redhatdisplay_medium"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:text="@string/tvLoginTitle"/>
+
+            <TextView
+                android:id="@+id/tvLoginDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvLoginTitle"
+                android:textSize="16sp"
+                android:fontFamily="@font/redhatdisplay_medium"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:text="@string/tvLoginDesc"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.goods.client.ui.custom_components.InputTextView
+            android:id="@+id/itvEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clBanner"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"/>
+
+        <com.goods.client.ui.custom_components.InputTextView
+            android:id="@+id/itvPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/itvEmail"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="5dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints"
+            app:layout_constraintStart_toStartOf="@+id/itvPassword"
+            app:layout_constraintEnd_toEndOf="@id/itvPassword"
+            app:layout_constraintTop_toBottomOf="@+id/itvPassword"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/primary_background"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:fontFamily="@font/redhatdisplay_medium"
+            android:textSize="18sp"
+            android:text="@string/btnTxtLogin"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Loading Layout -->
+    <RelativeLayout
+        android:id="@+id/loadingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#70000000"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <!-- Progress indicator or loading animation goes here -->
+        <ProgressBar
+            android:id="@+id/pbLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminateTint="@color/bleu_de_france"/>
+
+    </RelativeLayout>
+
+</FrameLayout>
