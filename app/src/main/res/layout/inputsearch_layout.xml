@@ -15,7 +15,7 @@
         android:textColor="@color/black"
         android:textColorHint="@color/grey"
         android:focusableInTouchMode="true"
-        android:background="@drawable/bg_circular_rectangle_white_grey"
+        android:background="@drawable/bg_circular_rectangle_electriceel_iwhite"
         tools:ignore="MissingConstraints"/>
 
     <ImageView

@@ -7,4 +7,9 @@
     <string name="tvETHintEmail">Email</string>
     <string name="tvETHintPassword">Password</string>
     <string name="btnTxtLogin">Login</string>
+    <string name="tvDummy_ToolbarTitle">Dummy Title</string>
+    <string name="tvTestQTI">TEST QTI</string>
+    <string name="tvDummyUsername">Dummy Username</string>
+    <string name="tvDummyEmail">dummyusername@goods.com</string>
+    <string name="btnTxtLogout">Logout</string>
 </resources>

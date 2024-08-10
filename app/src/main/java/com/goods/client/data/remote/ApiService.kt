@@ -1,7 +1,7 @@
 package com.goods.client.data.remote
 
-import com.goods.client.data.model.request.LoginRequest
-import com.goods.client.data.model.response.LoginResponse
+import com.goods.client.data.model.request.login.LoginRequest
+import com.goods.client.data.model.response.login.LoginResponse
 import retrofit2.http.Body
 import retrofit2.http.POST
 

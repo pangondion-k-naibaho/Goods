@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingHorizontal="15dp"
+    android:paddingVertical="10dp">
+
+    <ImageView
+        android:id="@+id/ivAppsLogo"
+        android:layout_width="107dp"
+        android:layout_height="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/goods_logo_horizontal_black"/>
+
+    <TextView
+        android:id="@+id/tvTestQti"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ivAppsLogo"
+        app:layout_constraintBottom_toBottomOf="@id/ivAppsLogo"
+        android:textSize="18sp"
+        android:fontFamily="@font/redhatdisplay_medium"
+        android:textColor="@color/black"
+        android:text="@string/tvTestQTI"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ivUserAvatar"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivAppsLogo"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/sample_photo"/>
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/ivUserAvatar"
+        app:layout_constraintTop_toTopOf="@+id/ivUserAvatar"
+        android:layout_marginStart="10dp"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/redhatdisplay_medium"
+        android:textColor="@color/void_century"
+        android:text="@string/tvDummyUsername"/>
+
+    <TextView
+        android:id="@+id/tvEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/tvUsername"
+        app:layout_constraintBottom_toBottomOf="@+id/ivUserAvatar"
+        android:textSize="14sp"
+        android:fontFamily="@font/redhatdisplay_regular"
+        android:textColor="@color/void_century"
+        android:alpha="0.6"
+        android:text="@string/tvDummyEmail"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnLogout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvEmail"
+        app:layout_constraintTop_toTopOf="@+id/ivUserAvatar"
+        app:layout_constraintBottom_toBottomOf="@+id/ivUserAvatar"
+        android:background="@drawable/primary_background"
+        android:textSize="15sp"
+        android:fontFamily="@font/redhatdisplay_medium"
+        android:textColor="@color/white"
+        android:text="@string/btnTxtLogout"
+        android:textAllCaps="false"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

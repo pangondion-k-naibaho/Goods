@@ -1,4 +1,4 @@
-package com.goods.client.data.model.response
+package com.goods.client.data.model.response.login
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName

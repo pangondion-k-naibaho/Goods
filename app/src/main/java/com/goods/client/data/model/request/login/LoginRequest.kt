@@ -1,4 +1,4 @@
-package com.goods.client.data.model.request
+package com.goods.client.data.model.request.login
 
 data class LoginRequest(
     val email: String,
