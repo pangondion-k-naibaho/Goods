@@ -9,9 +9,7 @@ import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import com.goods.client.R
 import com.goods.client.data.Constants.PREFERENCES.Companion.APP_PREFERENCES
-import com.goods.client.data.Constants.PREFERENCES.Companion.EMAIL_KEY
 import com.goods.client.data.Constants.PREFERENCES.Companion.TOKEN_KEY
-import com.goods.client.data.Constants.PREFERENCES.Companion.USERNAME_KEY
 import com.goods.client.data.remote.ApiConfig
 import com.goods.client.data.repository.login.LoginRepositoryImpl
 import com.goods.client.databinding.ActivityLoginBinding
@@ -56,26 +54,24 @@ class LoginActivity : AppCompatActivity() {
 
         loginViewModel.loginResponse.observe(this@LoginActivity, {response->
             val appPreferences = this@LoginActivity.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
-                val editor = appPreferences.edit()
-                editor.putString(TOKEN_KEY, response!!.token)
-                editor.putString(EMAIL_KEY, response.email)
-                editor.putString(USERNAME_KEY, response.username)
-                editor.apply()
-                if(editor.commit()){
-                    setLayoutForPopUp(true)
-                    this@LoginActivity.showPopUpNitification(
-                        textTitle = getString(R.string.popupLoginSuccessTitle),
-                        textDesc = getString(R.string.popupLoginSuccessDesc),
-                        backgroundImage = R.drawable.ic_success,
-                        listener = object: PopUpNotificationListener{
-                            override fun onPopUpClosed() {
-                                startActivity(DashboardActivity.newIntent(this@LoginActivity))
-                                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-                                finish()
-                            }
+            val editor = appPreferences.edit()
+            editor.putString(TOKEN_KEY, response!!.token)
+            editor.apply()
+            if(editor.commit()){
+                setLayoutForPopUp(true)
+                this@LoginActivity.showPopUpNitification(
+                    textTitle = getString(R.string.popupLoginSuccessTitle),
+                    textDesc = getString(R.string.popupLoginSuccessDesc),
+                    backgroundImage = R.drawable.ic_success,
+                    listener = object: PopUpNotificationListener{
+                        override fun onPopUpClosed() {
+                            startActivity(DashboardActivity.newIntent(this@LoginActivity))
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                            finish()
                         }
-                    )
-                }
+                    }
+                )
+            }
         })
 
         loginViewModel.isFail.observe(this@LoginActivity, {
