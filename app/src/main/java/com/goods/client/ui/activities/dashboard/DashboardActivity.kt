@@ -14,14 +14,19 @@ import androidx.viewpager2.widget.ViewPager2
 import com.goods.client.R
 import com.goods.client.data.Constants.PREFERENCES.Companion.APP_PREFERENCES
 import com.goods.client.data.Constants.PREFERENCES.Companion.EMAIL_KEY
+import com.goods.client.data.Constants.PREFERENCES.Companion.PASSWORD_KEY
 import com.goods.client.data.Constants.PREFERENCES.Companion.TOKEN_KEY
 import com.goods.client.data.Constants.PREFERENCES.Companion.USERNAME_KEY
 import com.goods.client.data.remote.ApiConfig
+import com.goods.client.data.repository.logout.LogoutRepositoryImpl
 import com.goods.client.data.repository.profile.ProfileRepositoryImpl
 import com.goods.client.databinding.ActivityDashboardBinding
 import com.goods.client.ui.activities.dashboard.fragments.AssetFragment
 import com.goods.client.ui.activities.dashboard.fragments.HomeFragment
+import com.goods.client.ui.activities.login.LoginActivity
 import com.goods.client.ui.custom_components.HomeActionBar
+import com.goods.client.ui.custom_components.PopUpNotificationListener
+import com.goods.client.ui.custom_components.showPopUpNitification
 import com.goods.client.ui.viewmodels.dashboard.DashboardViewModel
 import com.goods.client.ui.viewmodels.dashboard.DashboardViewModelFactory
 import com.google.android.material.navigation.NavigationBarView
@@ -49,8 +54,9 @@ class DashboardActivity : AppCompatActivity(), FragmentsDashboardCommunicator{
 
         val apiService = ApiConfig.createApiService()
         val profileRepository = ProfileRepositoryImpl(apiService)
+        val logoutRepository = LogoutRepositoryImpl(apiService)
 
-        val factory = DashboardViewModelFactory(profileRepository)
+        val factory = DashboardViewModelFactory(profileRepository, logoutRepository)
         dashboardViewModel = ViewModelProvider(this, factory)[DashboardViewModel::class.java]
 
         observeStatus()
@@ -77,8 +83,8 @@ class DashboardActivity : AppCompatActivity(), FragmentsDashboardCommunicator{
         dashboardViewModel.getProfile(userToken!!)
 
         dashboardViewModel.profileResponse.observe(this@DashboardActivity, {response->
-            val appPreferences = this@DashboardActivity.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
-            val editor = appPreferences.edit()
+//            val appPreferences = this@DashboardActivity.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
             editor.putString(TOKEN_KEY, response.refreshedToken)
             editor.apply()
 
@@ -88,6 +94,39 @@ class DashboardActivity : AppCompatActivity(), FragmentsDashboardCommunicator{
                 setListener(object: HomeActionBar.HomeActionbarListener{
                     override fun onLogoutClicked() {
                         Log.d(TAG, "Logout")
+                        dashboardViewModel.logoutUser(sharedPreferences.getString(TOKEN_KEY, "unknown")!!)
+
+                        dashboardViewModel.logoutResponse.observe(this@DashboardActivity, {response->
+                            Log.d(TAG, "logout response:$response")
+                            if(response!=null){
+                                editor.remove(TOKEN_KEY)
+                                editor.remove(EMAIL_KEY)
+                                editor.remove(USERNAME_KEY)
+                                editor.remove(PASSWORD_KEY)
+                                editor.apply()
+
+                                if(editor.commit()){
+                                    this@DashboardActivity.showPopUpNitification(
+                                        textTitle = getString(R.string.popupLogoutSuccessTitle),
+                                        textDesc = getString(R.string.popupLogoutSuccessDesc),
+                                        backgroundImage = R.drawable.ic_success,
+                                        listener = object: PopUpNotificationListener{
+                                            override fun onPopUpClosed() {
+                                                startActivity(LoginActivity.newIntent(this@DashboardActivity))
+                                                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                                                finish()
+                                            }
+                                        }
+                                    )
+                                }
+                            }else{
+                                this@DashboardActivity.showPopUpNitification(
+                                    textTitle = getString(R.string.popupLogoutFailedTitle),
+                                    textDesc = getString(R.string.popupLogoutFailedDesc),
+                                    backgroundImage = R.drawable.ic_fail,
+                                )
+                            }
+                        })
                     }
                 })
             }

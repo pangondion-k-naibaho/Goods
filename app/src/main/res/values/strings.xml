@@ -16,8 +16,12 @@
     <string name="menuTitleAsset">Asset</string>
     <string name="hello_home_fragment">Hello home fragment</string>
     <string name="hello_asset_fragment">Hello asset fragment</string>
-    <string name="popupLoginSuccessTitle">Login Successful</string>
-    <string name="popupLoginFailedTitle">Logout Failed</string>
+    <string name="popupLoginSuccessTitle">Log In Successful</string>
+    <string name="popupLoginFailedTitle">Log In Failed</string>
     <string name="popupLoginSuccessDesc">You have successfully logged in.\nWelcome back!</string>
     <string name="popupLoginFailedDesc">Please check your credentials and try again</string>
+    <string name="popupLogoutSuccessTitle">Log Out Success</string>
+    <string name="popupLogoutSuccessDesc">You\'ve successfully logged out.\nPlease come back anytime.</string>
+    <string name="popupLogoutFailedTitle">Log Out Failed</string>
+    <string name="popupLogoutFailedDesc">Unable to log you out at this time.\nPlease try again later.</string>
 </resources>
