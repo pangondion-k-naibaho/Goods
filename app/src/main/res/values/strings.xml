@@ -12,4 +12,8 @@
     <string name="tvDummyUsername">Dummy Username</string>
     <string name="tvDummyEmail">dummyusername@goods.com</string>
     <string name="btnTxtLogout">Logout</string>
+    <string name="menuTitleHome">Home</string>
+    <string name="menuTitleAsset">Asset</string>
+    <string name="hello_home_fragment">Hello home fragment</string>
+    <string name="hello_asset_fragment">Hello asset fragment</string>
 </resources>

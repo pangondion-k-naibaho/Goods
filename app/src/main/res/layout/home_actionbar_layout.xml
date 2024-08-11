@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingHorizontal="15dp"
-    android:paddingVertical="10dp">
+    android:paddingVertical="10dp"
+    android:background="@color/white">
 
     <ImageView
         android:id="@+id/ivAppsLogo"

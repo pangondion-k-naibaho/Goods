@@ -6,98 +6,62 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- Main Content View -->
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.activities.login.LoginActivity">
+        tools:context=".ui.activities.dashboard.DashboardActivity"
+        android:background="@color/doctor">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clBanner"
+        <com.goods.client.ui.custom_components.HomeActionBar
+            android:id="@+id/habDashboard"
             android:layout_width="match_parent"
-            android:layout_height="320dp"
+            android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@drawable/login_banner">
+            app:layout_constraintTop_toTopOf="parent"/>
 
-            <ImageView
-                android:id="@+id/ivAppsLogo"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vpDashboard"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/habDashboard"
+            app:layout_constraintBottom_toTopOf="@+id/clBottomNav"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clBottomNav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@color/white">
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bnvDashboard"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/goods_logo"
-                android:contentDescription="@null"/>
-
-            <TextView
-                android:id="@+id/tvLoginTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivAppsLogo"
-                android:textSize="25sp"
-                android:fontFamily="@font/redhatdisplay_medium"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:text="@string/tvLoginTitle"/>
-
-            <TextView
-                android:id="@+id/tvLoginDesc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvLoginTitle"
-                android:textSize="16sp"
-                android:fontFamily="@font/redhatdisplay_medium"
-                android:textColor="@color/white"
-                android:textAlignment="center"
-                android:text="@string/tvLoginDesc"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:itemIconTint="@drawable/item_menu_selector"
+                app:itemTextColor="@drawable/item_menu_selector"
+                app:labelVisibilityMode="labeled"
+                app:menu="@menu/dashboard_bottomnav_menu"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.goods.client.ui.custom_components.InputTextView
-            android:id="@+id/itvEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:ignore="MissingConstraints"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnInputAsset"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/clBanner"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="10dp"/>
-
-        <com.goods.client.ui.custom_components.InputTextView
-            android:id="@+id/itvPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:ignore="MissingConstraints"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/itvEmail"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="5dp"/>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:ignore="MissingConstraints"
-            app:layout_constraintStart_toStartOf="@+id/itvPassword"
-            app:layout_constraintEnd_toEndOf="@id/itvPassword"
-            app:layout_constraintTop_toBottomOf="@+id/itvPassword"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/primary_background"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:fontFamily="@font/redhatdisplay_medium"
-            android:textSize="18sp"
-            android:text="@string/btnTxtLogin"/>
+            app:layout_constraintBottom_toTopOf="@+id/clBottomNav"
+            app:layout_constraintTop_toTopOf="@+id/clBottomNav"
+            android:background="@drawable/ic_add"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
