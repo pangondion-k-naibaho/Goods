@@ -9,7 +9,13 @@ class LoginRepositoryImpl(private val apiService: ApiService):LoginRepository {
         return try {
             val request = LoginRequest(email, password)
             val response = apiService.loginUser(request)
-            Result.success(response)
+
+            if (response.isSuccessful) {
+                Result.success(response.body()!!)
+            } else {
+                // Return an exception with the HTTP status code
+                Result.failure(Exception("Error ${response.code()}: ${response.message()}"))
+            }
         } catch (e: Exception) {
             Result.failure(e)
         }

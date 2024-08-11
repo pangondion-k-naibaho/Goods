@@ -1,5 +1,6 @@
 package com.goods.client.ui.viewmodels.login
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,19 +10,44 @@ import com.goods.client.data.repository.login.LoginRepository
 import kotlinx.coroutines.launch
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
+    private val TAG = LoginViewModel::class.java.simpleName
 
-    private val _loginResult = MutableLiveData<Result<LoginResponse>>()
-    val loginResult: LiveData<Result<LoginResponse>> = _loginResult
+    private val _loginResponse = MutableLiveData<LoginResponse>()
+    val loginResponse: LiveData<LoginResponse> = _loginResponse
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _isFail = MutableLiveData<Boolean>()
+    val isFail: LiveData<Boolean> = _isFail
+
+    private val _errorMessage = MutableLiveData<String?>()
+    val errorMessage: LiveData<String?> = _errorMessage
+
+//    fun loginUser(email: String, password: String) {
+//        _isLoading.value = true
+//        viewModelScope.launch {
+//            val result = loginRepository.login(email, password)
+//            _loginResult.value = result
+//            _isLoading.value = false
+//        }
+//    }
 
     fun loginUser(email: String, password: String) {
         _isLoading.value = true
         viewModelScope.launch {
             val result = loginRepository.login(email, password)
-            _loginResult.value = result
+            if (result.isSuccess) {
+                _loginResponse.value = result.getOrNull()
+                Log.d(TAG, "Success")
+//                _errorMessage.value = "no error message"
+            } else {
+                _isFail.value = true
+                Log.e(TAG, "error message :${result.exceptionOrNull()?.message}")
+//                _errorMessage.value = result.exceptionOrNull()?.message
+            }
             _isLoading.value = false
         }
     }
+
 }
