@@ -2,6 +2,7 @@ package com.goods.client.data.remote
 
 import com.goods.client.data.model.request.login.LoginRequest
 import com.goods.client.data.model.request.token.TokenRequest
+import com.goods.client.data.model.response.all_asset.AllAssetResponse
 import com.goods.client.data.model.response.login.LoginResponse
 import com.goods.client.data.model.response.logout.LogoutResponse
 import com.goods.client.data.model.response.profile.ProfileResponse
@@ -10,6 +11,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface ApiService {
     @POST("auth/login")
@@ -32,4 +34,12 @@ interface ApiService {
     suspend fun logoutUser(
         @Header("Authorization") authToken: String
     ):Response<LogoutResponse>
+
+    @GET("asset/")
+    suspend fun getAllAsset(
+        @Header("Authorization") authToken: String,
+        @Query("page") page: Int,
+        @Query("page_size") pageSize:Int?=10,
+        @Query("search") search: String,
+    ): Response<AllAssetResponse>
 }

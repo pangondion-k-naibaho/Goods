@@ -24,4 +24,9 @@
     <string name="popupLogoutSuccessDesc">You\'ve successfully logged out.\nPlease come back anytime.</string>
     <string name="popupLogoutFailedTitle">Log Out Failed</string>
     <string name="popupLogoutFailedDesc">Unable to log you out at this time.\nPlease try again later.</string>
+    <string name="tvListAssetTitle">List Asset</string>
+    <string name="tvAssetNameTitle">Asset Name</string>
+    <string name="tvDummyAssetName">Dummy Aset</string>
+    <string name="isvTxtSearch">Search asset</string>
+    <string name="toastTextEmptyAssetSearch">No results for the requested asset</string>
 </resources>

@@ -18,18 +18,18 @@ class ApiConfig {
                 HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE)
             }
 
-            val clientId = ""
-            val clientSecret = ""
-
-            val client = OkHttpClient.Builder()
-                .addInterceptor(loggingInterceptor)
-                .addInterceptor { chain ->
-                    val request = chain.request().newBuilder()
-                        .addHeader("Authorization", Credentials.basic(clientId, clientSecret))
-                        .build()
-                    chain.proceed(request)
-                }
-                .build()
+//            val clientId = ""
+//            val clientSecret = ""
+//
+//            val client = OkHttpClient.Builder()
+//                .addInterceptor(loggingInterceptor)
+//                .addInterceptor { chain ->
+//                    val request = chain.request().newBuilder()
+//                        .addHeader("Authorization", Credentials.basic(clientId, clientSecret))
+//                        .build()
+//                    chain.proceed(request)
+//                }
+//                .build()
 
             val retrofit = Retrofit.Builder()
                 .baseUrl(API_URL)

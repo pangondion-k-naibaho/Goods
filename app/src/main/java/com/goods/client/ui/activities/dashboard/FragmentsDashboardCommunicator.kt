@@ -5,5 +5,7 @@ interface FragmentsDashboardCommunicator {
 
     fun stopLoading()
 
+    fun updateProfile(username: String, email: String)
+
 //    fun setWarning()
 }

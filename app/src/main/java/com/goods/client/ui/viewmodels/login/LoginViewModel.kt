@@ -12,16 +12,16 @@ import kotlinx.coroutines.launch
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
     private val TAG = LoginViewModel::class.java.simpleName
 
-    private val _loginResponse = MutableLiveData<LoginResponse>()
+    private var _loginResponse = MutableLiveData<LoginResponse>()
     val loginResponse: LiveData<LoginResponse> = _loginResponse
 
-    private val _isLoading = MutableLiveData<Boolean>()
+    private var _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _isFail = MutableLiveData<Boolean>()
+    private var _isFail = MutableLiveData<Boolean>()
     val isFail: LiveData<Boolean> = _isFail
 
-    private val _errorMessage = MutableLiveData<String?>()
+    private var _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
 //    fun loginUser(email: String, password: String) {

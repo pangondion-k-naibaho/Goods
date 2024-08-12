@@ -17,17 +17,20 @@ class DashboardViewModel(
 ): ViewModel() {
     private val TAG = DashboardViewModel::class.java.simpleName
 
-    private val _profileResponse = MutableLiveData<ProfileResponse>()
+    private var _profileResponse = MutableLiveData<ProfileResponse>()
     val profileResponse: LiveData<ProfileResponse> = _profileResponse
 
-    private val _logoutResponse = MutableLiveData<LogoutResponse>()
+    private var _logoutResponse = MutableLiveData<LogoutResponse>()
     val logoutResponse: LiveData<LogoutResponse> = _logoutResponse
 
-    private val _isLoading = MutableLiveData<Boolean>()
+    private var _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _isFail = MutableLiveData<Boolean>()
+    private var _isFail = MutableLiveData<Boolean>()
     val isFail: LiveData<Boolean> = _isFail
+
+    private var _isLogoutFail = MutableLiveData<Boolean>()
+    val isLogoutFail: LiveData<Boolean> = _isLogoutFail
 
     fun getProfile(token: String){
         _isLoading.value = true
@@ -52,7 +55,7 @@ class DashboardViewModel(
                 _logoutResponse.value = result.getOrNull()
                 Log.d(TAG, "Success")
             }else{
-                _isFail.value = true
+                _isLogoutFail.value = true
                 Log.e(TAG, "error message: ${result.exceptionOrNull()?.message}")
             }
             _isLoading.value = false

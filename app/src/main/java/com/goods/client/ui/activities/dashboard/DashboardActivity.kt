@@ -72,6 +72,14 @@ class DashboardActivity : AppCompatActivity(), FragmentsDashboardCommunicator{
         dashboardViewModel.isFail.observe(this@DashboardActivity, {
             Toast.makeText(this@DashboardActivity, "Failed to retrieve profile", Toast.LENGTH_SHORT).show()
         })
+
+        dashboardViewModel.isLogoutFail.observe(this@DashboardActivity, {
+            this@DashboardActivity.showPopUpNitification(
+                textTitle = getString(R.string.popupLogoutFailedTitle),
+                textDesc = getString(R.string.popupLogoutFailedDesc),
+                backgroundImage = R.drawable.ic_fail,
+            )
+        })
     }
 
     private fun initView(){
@@ -119,13 +127,14 @@ class DashboardActivity : AppCompatActivity(), FragmentsDashboardCommunicator{
                                         }
                                     )
                                 }
-                            }else{
-                                this@DashboardActivity.showPopUpNitification(
-                                    textTitle = getString(R.string.popupLogoutFailedTitle),
-                                    textDesc = getString(R.string.popupLogoutFailedDesc),
-                                    backgroundImage = R.drawable.ic_fail,
-                                )
                             }
+//                            else{
+//                                this@DashboardActivity.showPopUpNitification(
+//                                    textTitle = getString(R.string.popupLogoutFailedTitle),
+//                                    textDesc = getString(R.string.popupLogoutFailedDesc),
+//                                    backgroundImage = R.drawable.ic_fail,
+//                                )
+//                            }
                         })
                     }
                 })
@@ -193,5 +202,12 @@ class DashboardActivity : AppCompatActivity(), FragmentsDashboardCommunicator{
 
     override fun stopLoading() {
         binding.loadingLayout.visibility = View.GONE
+    }
+
+    override fun updateProfile(username: String, email: String) {
+        binding.habDashboard.apply {
+            setUsername(username)
+            setEmail(email)
+        }
     }
 }
