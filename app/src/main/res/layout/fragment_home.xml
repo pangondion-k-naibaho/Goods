@@ -1,14 +1,245 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/doctor"
+    android:paddingHorizontal="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="60dp"
+    android:scrollbars="none"
     tools:context=".ui.activities.dashboard.fragments.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clMainContent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_home_fragment" />
+        android:layout_height="wrap_content"
+        android:background="@color/full_transparent">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/tvStatusTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:fontFamily="@font/redhatdisplay_medium"
+            android:textSize="20sp"
+            android:textColor="@color/void_century"
+            android:text="@string/tvStatusTitle"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clSold"
+            android:layout_width="0dp"
+            android:layout_height="112dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvStatusTitle"
+            app:layout_constraintEnd_toStartOf="@+id/clInStock"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="4.5dp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp"
+            android:background="@drawable/bg_circular_rectangle_white">
+
+            <TextView
+                android:id="@+id/tvStatusName1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textSize="16sp"
+                android:textColor="@color/roman_silver"
+                android:text="@string/tvStatusSold"/>
+
+            <TextView
+                android:id="@+id/tvStatusValue1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="26dp"
+                android:textSize="24sp"
+                android:textColor="@color/void_century"
+                android:text="@string/tvDummyStatusValue"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clExpired"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toEndOf="@+id/clInStock"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/clSold"
+            app:layout_constraintBottom_toBottomOf="@+id/clSold"
+            android:layout_marginStart="4.5dp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp"
+            android:background="@drawable/bg_circular_rectangle_white">
+
+            <TextView
+                android:id="@+id/tvStatusName3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textSize="16sp"
+                android:textColor="@color/roman_silver"
+                android:text="@string/tvStatusExpired"/>
+
+            <TextView
+                android:id="@+id/tvStatusValue3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="26dp"
+                android:textSize="24sp"
+                android:textColor="@color/void_century"
+                android:text="@string/tvDummyStatusValue"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clInStock"
+            android:layout_width="0dp"
+            android:layout_height="112dp"
+            app:layout_constraintStart_toEndOf="@id/clSold"
+            app:layout_constraintTop_toTopOf="@+id/clSold"
+            app:layout_constraintBottom_toBottomOf="@+id/clSold"
+            app:layout_constraintEnd_toStartOf="@+id/clExpired"
+            android:layout_marginHorizontal="4.5dp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp"
+            android:background="@drawable/bg_circular_rectangle_white">
+
+            <TextView
+                android:id="@+id/tvStatusName2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textSize="16sp"
+                android:textColor="@color/roman_silver"
+                android:text="@string/tvStatusInStock"/>
+
+            <TextView
+                android:id="@+id/tvStatusValue2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="26dp"
+                android:textSize="24sp"
+                android:textColor="@color/void_century"
+                android:text="@string/tvDummyStatusValue"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/chartStatus"
+            android:layout_width="0dp"
+            android:layout_height="288dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clInStock"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_circular_rectangle_white"/>
+
+        <TextView
+            android:id="@+id/tvLocationTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chartStatus"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/redhatdisplay_medium"
+            android:textSize="20sp"
+            android:textColor="@color/void_century"
+            android:text="@string/tvLocationTitle"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ClGudang"
+            android:layout_width="0dp"
+            android:layout_height="83dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvLocationTitle"
+            app:layout_constraintEnd_toStartOf="@id/ClRak"
+            android:layout_marginEnd="4.5dp"
+            android:background="@drawable/bg_circular_rectangle_white"
+            android:paddingVertical="8dp"
+            android:paddingHorizontal="12dp">
+
+            <TextView
+                android:id="@+id/tvLocationName1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginBottom="8.5dp"
+                android:textSize="16sp"
+                android:textColor="@color/roman_silver"
+                android:text="@string/tvLocationGudang"/>
+
+            <TextView
+                android:id="@+id/tvLocationValue1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="8.5dp"
+                android:textSize="24sp"
+                android:textColor="@color/void_century"
+                android:text="@string/tvDummyLocationValue"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ClRak"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toEndOf="@id/ClGudang"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ClGudang"
+            app:layout_constraintBottom_toBottomOf="@+id/ClGudang"
+            android:layout_marginStart="4.5dp"
+            android:background="@drawable/bg_circular_rectangle_white"
+            android:paddingVertical="8dp"
+            android:paddingHorizontal="12dp">
+
+            <TextView
+                android:id="@+id/tvLocationName2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginBottom="8.5dp"
+                android:textSize="16sp"
+                android:textColor="@color/roman_silver"
+                android:text="@string/tvLocationRak"/>
+
+            <TextView
+                android:id="@+id/tvLocationValue2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="8.5dp"
+                android:textSize="24sp"
+                android:textColor="@color/void_century"
+                android:text="@string/tvDummyLocationValue"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/chartLocation"
+            android:layout_width="0dp"
+            android:layout_height="288dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ClRak"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

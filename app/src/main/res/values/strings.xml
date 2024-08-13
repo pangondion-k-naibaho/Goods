@@ -29,4 +29,13 @@
     <string name="tvDummyAssetName">Dummy Aset</string>
     <string name="isvTxtSearch">Search asset</string>
     <string name="toastTextEmptyAssetSearch">No results for the requested asset</string>
+    <string name="tvStatusTitle">Status</string>
+    <string name="tvStatusSold">Asset Sold</string>
+    <string name="tvStatusInStock">Asset In Stock</string>
+    <string name="tvStatusExpired">Expired Asset</string>
+    <string name="tvDummyStatusValue">X</string>
+    <string name="tvLocationTitle">Location</string>
+    <string name="tvLocationGudang">Gudang</string>
+    <string name="tvLocationRak">Rak Penjualan</string>
+    <string name="tvDummyLocationValue">Y</string>
 </resources>

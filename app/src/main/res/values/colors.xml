@@ -102,4 +102,6 @@
     <color name="icewind_dale">#E8EBED</color>
     <color name="doctor">#F9F9F9</color>
 
+    <color name="full_transparent">#00000000</color>
+
 </resources>
