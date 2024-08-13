@@ -35,6 +35,7 @@ class ApiConfig {
                 .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getUnsafeOkHttpClient())
+//                .client(client)
                 .build()
 
             return retrofit.create(ApiService::class.java)

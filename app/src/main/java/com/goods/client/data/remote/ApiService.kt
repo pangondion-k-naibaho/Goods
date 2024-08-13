@@ -3,6 +3,7 @@ package com.goods.client.data.remote
 import com.goods.client.data.model.request.login.LoginRequest
 import com.goods.client.data.model.request.token.TokenRequest
 import com.goods.client.data.model.response.all_asset.AllAssetResponse
+import com.goods.client.data.model.response.asset_by_status.CollectionAssetStatusResponse
 import com.goods.client.data.model.response.login.LoginResponse
 import com.goods.client.data.model.response.logout.LogoutResponse
 import com.goods.client.data.model.response.profile.ProfileResponse
@@ -42,4 +43,10 @@ interface ApiService {
         @Query("page_size") pageSize:Int?=10,
         @Query("search") search: String,
     ): Response<AllAssetResponse>
+
+    @GET("home/agg-asset-by-status/")
+
+    suspend fun getAssetByStatus(
+        @Header("Authorization") authToken: String,
+    ): Response<CollectionAssetStatusResponse>
 }
