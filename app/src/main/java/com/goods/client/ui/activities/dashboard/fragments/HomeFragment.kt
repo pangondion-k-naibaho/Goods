@@ -20,6 +20,7 @@ import com.goods.client.R
 import com.goods.client.data.Constants.PREFERENCES.Companion.APP_PREFERENCES
 import com.goods.client.data.Constants.PREFERENCES.Companion.TOKEN_KEY
 import com.goods.client.data.remote.ApiConfig
+import com.goods.client.data.repository.asset_by_location.AssetLocationRepositoryImpl
 import com.goods.client.data.repository.asset_by_status.AssetStatusRepositoryImpl
 import com.goods.client.databinding.FragmentHomeBinding
 import com.goods.client.ui.activities.dashboard.FragmentsDashboardCommunicator
@@ -28,6 +29,8 @@ import com.goods.client.ui.custom_components.PopUpNotificationListener
 import com.goods.client.ui.custom_components.showPopUpNitification
 import com.goods.client.ui.viewmodels.home.HomeViewModel
 import com.goods.client.ui.viewmodels.home.HomeViewModelFactory
+import com.goods.client.utils.Extensions.Companion.getHalfScreenWidthInFloat
+import com.goods.client.utils.Extensions.Companion.retrieveValueBasedOnLocation
 import com.goods.client.utils.Extensions.Companion.retrieveValuebasedOnStatus
 
 class HomeFragment : Fragment() {
@@ -54,6 +57,10 @@ class HomeFragment : Fragment() {
         private const val SOLD = "Sold"
         private const val STOCK = "Stock"
         private const val EXPIRED = "Asset"
+
+        //Asset By Location
+        private const val GUDANG = "Gudang"
+        private const val RAK = "Rak Penjualan"
     }
 
     override fun onCreateView(
@@ -66,8 +73,9 @@ class HomeFragment : Fragment() {
 
         val apiService = ApiConfig.createApiService()
         val assetStatusRepository = AssetStatusRepositoryImpl(apiService)
+        val assetLocationRepository = AssetLocationRepositoryImpl(apiService)
 
-        val factory = HomeViewModelFactory(assetStatusRepository)
+        val factory = HomeViewModelFactory(assetStatusRepository, assetLocationRepository)
         homeViewModel = ViewModelProvider(this@HomeFragment.requireActivity(), factory)[HomeViewModel::class.java]
 
         observeStatus()
@@ -110,9 +118,10 @@ class HomeFragment : Fragment() {
         userToken = sharedPreferences.getString(TOKEN_KEY, "")
 
         homeViewModel.getAssetByStatus(userToken!!)
+        homeViewModel.getAssetByLocation(userToken!!)
 
         homeViewModel.collectionAssetStatusResponse.observe(this@HomeFragment.requireActivity(), {response->
-            Log.d(TAG, "response: $response")
+            Log.d(TAG, "asset by status response: $response")
 
             val soldCount = response.retrieveValuebasedOnStatus(SOLD)
             val stockCount = response.retrieveValuebasedOnStatus(STOCK)
@@ -177,9 +186,11 @@ class HomeFragment : Fragment() {
                 legend.textColor = this@HomeFragment.requireActivity().getColor(R.color.void_century)
                 legend.form = Legend.LegendForm.CIRCLE
                 legend.formSize = 10f
-                legend.xEntrySpace = 50f
+                legend.xEntrySpace = 40f
+                legend.yEntrySpace = 10f
                 legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
                 legend.textSize = 12f
+                legend.xOffset = -50f
 
                 legend.setCustom(listOf(
                     LegendEntry(SOLD, Legend.LegendForm.CIRCLE, 10f, 2f, null, this@HomeFragment.requireActivity().getColor(R.color.verditer)),
@@ -190,6 +201,84 @@ class HomeFragment : Fragment() {
                 animateY(2000)
             }
 
+        })
+
+        homeViewModel.collectionAssetLocationResponse.observe(this@HomeFragment.requireActivity(), {response->
+            Log.d(TAG, "asset by location response: $response")
+
+            val gudangCount = response.retrieveValueBasedOnLocation(GUDANG)
+            val rakCount = response.retrieveValueBasedOnLocation(RAK)
+
+            binding.tvLocationValue1.text = gudangCount.toString()
+            binding.tvLocationValue2.text = rakCount.toString()
+
+            val barEntries = ArrayList<BarEntry>()
+            barEntries.add(BarEntry(0f, gudangCount.toFloat())) // Index 0 untuk Sold
+            barEntries.add(BarEntry(1f, rakCount.toFloat())) // Index 1 untuk Stock
+
+            val barDataSet = BarDataSet(barEntries, "Kategori")
+            barDataSet.colors = listOf(
+                this@HomeFragment.requireActivity().getColor(R.color.verditer), // Warna untuk Sold
+                this@HomeFragment.requireActivity().getColor(R.color.mythical_orange), // Warna untuk Stock
+            )
+
+            barDataSet.setDrawValues(false)
+
+            val barData = BarData(barDataSet)
+            barData.setValueTextColor(this@HomeFragment.requireActivity().getColor(R.color.void_century)) // Atur warna teks
+            barData.setValueTextSize(16f) // Ukuran teks
+            barData.barWidth = 0.3f
+
+
+            binding.chartLocation.apply {
+                data = barData
+                setFitBars(true)
+
+                //Description
+                description.isEnabled = false
+                axisLeft.textColor = this@HomeFragment.requireActivity().getColor(R.color.void_century)
+                axisRight.isEnabled = false
+                xAxis.textColor = this@HomeFragment.requireActivity().getColor(R.color.void_century)
+                legend.textColor = this@HomeFragment.requireActivity().getColor(R.color.void_century)
+
+                xAxis.granularity = 1f
+                xAxis.position = XAxis.XAxisPosition.BOTTOM
+                xAxis.setDrawGridLines(false)
+                xAxis.setDrawAxisLine(false)
+                xAxis.setDrawLabels(false)
+
+                axisLeft.setDrawGridLines(true)
+                axisLeft.setDrawAxisLine(false)
+                axisLeft.setDrawLabels(true)
+                axisLeft.axisMinimum = 0f
+                axisLeft.axisMaximum = 20f
+                axisLeft.granularity = 1f
+                axisLeft.setLabelCount(5, true)
+
+                axisRight.setDrawGridLines(false)
+
+                description.text = getString(R.string.chartTitle)
+                description.textColor = this@HomeFragment.requireActivity().getColor(R.color.void_century)
+                description.textSize = 20f
+
+                //Legend (label chart)
+                legend.isEnabled = true
+                legend.textColor = this@HomeFragment.requireActivity().getColor(R.color.void_century)
+                legend.form = Legend.LegendForm.CIRCLE
+                legend.formSize = 10f
+                legend.xEntrySpace = 50f
+                legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+                legend.xOffset = -30f
+                legend.textSize = 12f
+
+                legend.setCustom(listOf(
+                    LegendEntry(GUDANG, Legend.LegendForm.CIRCLE, 10f, 2f, null, this@HomeFragment.requireActivity().getColor(R.color.verditer)),
+                    LegendEntry(RAK, Legend.LegendForm.CIRCLE, 10f, 2f, null, this@HomeFragment.requireActivity().getColor(R.color.mythical_orange)),
+//                    LegendEntry("Expired", Legend.LegendForm.CIRCLE, 10f, 2f, null, this@HomeFragment.requireActivity().getColor(R.color.grenadine_pink))
+                ))
+
+                animateY(2000)
+            }
         })
     }
 

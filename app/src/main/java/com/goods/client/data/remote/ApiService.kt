@@ -3,6 +3,7 @@ package com.goods.client.data.remote
 import com.goods.client.data.model.request.login.LoginRequest
 import com.goods.client.data.model.request.token.TokenRequest
 import com.goods.client.data.model.response.all_asset.AllAssetResponse
+import com.goods.client.data.model.response.asset_by_location.CollectionAssetLocationResponse
 import com.goods.client.data.model.response.asset_by_status.CollectionAssetStatusResponse
 import com.goods.client.data.model.response.login.LoginResponse
 import com.goods.client.data.model.response.logout.LogoutResponse
@@ -49,4 +50,9 @@ interface ApiService {
     suspend fun getAssetByStatus(
         @Header("Authorization") authToken: String,
     ): Response<CollectionAssetStatusResponse>
+
+    @GET("home/agg-asset-by-location/")
+    suspend fun getAssetByLocation(
+        @Header("Authorization") authToken: String,
+    ): Response<CollectionAssetLocationResponse>
 }

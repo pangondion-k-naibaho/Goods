@@ -1,8 +1,11 @@
 package com.goods.client.utils
 
+import android.app.Activity
 import android.content.Context
+import android.util.DisplayMetrics
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.goods.client.data.model.response.asset_by_location.CollectionAssetLocationResponse
 import com.goods.client.data.model.response.asset_by_status.CollectionAssetStatusResponse
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -21,12 +24,19 @@ class Extensions {
             return outputFormat.format(date!!)
         }
 
-//        fun CollectionAssetStatusResponse.retrieveValuebasedOnStatus(inputStatus: String): String {
-//            return results.find { it.status.name == inputStatus }?.count?.toString() ?: "0"
-//        }
-
         fun CollectionAssetStatusResponse.retrieveValuebasedOnStatus(inputStatus: String): Int {
             return results.find { it.status.name == inputStatus }?.count ?: 0
+        }
+
+        fun CollectionAssetLocationResponse.retrieveValueBasedOnLocation(inputLocation: String): Int{
+            return results.find { it.location.name == inputLocation }?.count ?: 0
+        }
+
+        fun Activity.getHalfScreenWidthInFloat(): Float {
+            val displayMetrics = DisplayMetrics()
+            windowManager.defaultDisplay.getMetrics(displayMetrics)
+            // Mendapatkan lebar layar dan membaginya menjadi 50%
+            return (displayMetrics.widthPixels / 2).toFloat()
         }
     }
 }
