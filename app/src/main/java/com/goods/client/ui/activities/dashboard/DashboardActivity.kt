@@ -21,6 +21,7 @@ import com.goods.client.data.remote.ApiConfig
 import com.goods.client.data.repository.logout.LogoutRepositoryImpl
 import com.goods.client.data.repository.profile.ProfileRepositoryImpl
 import com.goods.client.databinding.ActivityDashboardBinding
+import com.goods.client.ui.activities.add_asset.AddAssetActivity
 import com.goods.client.ui.activities.dashboard.fragments.AssetFragment
 import com.goods.client.ui.activities.dashboard.fragments.HomeFragment
 import com.goods.client.ui.activities.login.LoginActivity
@@ -193,6 +194,12 @@ class DashboardActivity : AppCompatActivity(), FragmentsDashboardCommunicator{
                 }
 
             })
+        }
+
+        binding.btnInputAsset.setOnClickListener {
+            startActivity(AddAssetActivity.newIntent(this@DashboardActivity))
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+            finish()
         }
     }
 

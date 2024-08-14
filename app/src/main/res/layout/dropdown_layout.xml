@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:fontFamily="@font/redhatdisplay_medium"
+        android:textSize="14sp"
+        android:textColor="@color/void_century"
+        android:text="@string/tvDummyDropdownTitle"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clDropdownContent"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+        android:layout_marginTop="8dp"
+        android:paddingVertical="11dp"
+        android:paddingHorizontal="16dp"
+        android:background="@drawable/bg_circular_rectangle_electriceel_iwhite">
+
+        <TextView
+            android:id="@+id/tvSelectedItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="14sp"
+            android:fontFamily="@font/redhatdisplay_medium"
+            android:textColor="@color/roman_silver"
+            android:text="@string/tvDummyDropdownOption"/>
+
+        <Spinner
+            android:id="@+id/spContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/tvSelectedItem"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@null"/>
+
+        <ImageView
+            android:id="@+id/ivSpinnerArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_chevron_down"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tvPopUpWarning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/clDropdownContent"
+        android:layout_marginTop="8dp"
+        android:textSize="12sp"
+        android:textColor="@color/sunburnt_cyclops"
+        android:fontFamily="@font/redhatdisplay_medium"
+        android:text="@string/tvInputTextError"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

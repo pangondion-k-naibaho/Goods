@@ -5,9 +5,12 @@ import com.goods.client.data.model.request.token.TokenRequest
 import com.goods.client.data.model.response.all_asset.AllAssetResponse
 import com.goods.client.data.model.response.asset_by_location.CollectionAssetLocationResponse
 import com.goods.client.data.model.response.asset_by_status.CollectionAssetStatusResponse
+import com.goods.client.data.model.response.collection_location.CollectionLocationResponse
+import com.goods.client.data.model.response.collection_status.CollectionStatusResponse
 import com.goods.client.data.model.response.login.LoginResponse
 import com.goods.client.data.model.response.logout.LogoutResponse
 import com.goods.client.data.model.response.profile.ProfileResponse
+import com.goods.client.data.repository.collection_status.CollectionStatusRepository
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -55,4 +58,14 @@ interface ApiService {
     suspend fun getAssetByLocation(
         @Header("Authorization") authToken: String,
     ): Response<CollectionAssetLocationResponse>
+
+    @GET("status/")
+    suspend fun getCollectionStatus(
+        @Header("Authorization") authToken: String
+    ): Response<CollectionStatusResponse>
+
+    @GET("location/")
+    suspend fun getCollectionLocation(
+        @Header("Authorization") authToken: String
+    ): Response<CollectionLocationResponse>
 }

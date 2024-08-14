@@ -41,4 +41,10 @@
     <string name="tvLocationRak">Rak Penjualan</string>
     <string name="tvDummyLocationValue">Y</string>
     <string name="chartTitle">Chart</string>
+    <string name="tvInputAssetDesc">Fill this form below</string>
+    <string name="tvDummyDropdownOption">Dummy Option</string>
+    <string name="tvDummyDropdownTitle">Dummy Title</string>
+    <string name="btnTxtSubmit">Submit</string>
+    <string name="dropdownHintStatus">Select status</string>
+    <string name="dropdownHintLocation">Select location</string>
 </resources>

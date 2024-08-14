@@ -5,8 +5,11 @@ import android.content.Context
 import android.util.DisplayMetrics
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.goods.client.data.model.other.ItemDropdown
 import com.goods.client.data.model.response.asset_by_location.CollectionAssetLocationResponse
+import com.goods.client.data.model.response.asset_by_location.LocationResponse
 import com.goods.client.data.model.response.asset_by_status.CollectionAssetStatusResponse
+import com.goods.client.data.model.response.asset_by_status.StatusResponse
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.TimeUnit
@@ -37,6 +40,28 @@ class Extensions {
             windowManager.defaultDisplay.getMetrics(displayMetrics)
             // Mendapatkan lebar layar dan membaginya menjadi 50%
             return (displayMetrics.widthPixels / 2).toFloat()
+        }
+
+        fun retrieveListItemDropdownLocation(input: List<LocationResponse>): List<ItemDropdown>{
+            val arrListItemDropdown = ArrayList<ItemDropdown>()
+
+            for(i in input.indices){
+                val itemDropdown = ItemDropdown()
+                itemDropdown.name = input[i].name
+            }
+
+            return arrListItemDropdown
+        }
+
+        fun retrieveListItemDropdownStatus(input: List<StatusResponse>): List<ItemDropdown>{
+            val arrListItemDropdown = ArrayList<ItemDropdown>()
+
+            for(i in input.indices){
+                val itemDropdown = ItemDropdown()
+                itemDropdown.name = input[i].name
+            }
+
+            return arrListItemDropdown
         }
     }
 }
