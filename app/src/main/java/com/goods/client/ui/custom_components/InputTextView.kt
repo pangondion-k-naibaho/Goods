@@ -206,6 +206,10 @@ class InputTextView: ConstraintLayout {
         }
     }
 
+    fun setText(text: String){
+        binding.etInput.setText(text)
+    }
+
     interface InputViewListener{
         fun onClickReveal()
     }

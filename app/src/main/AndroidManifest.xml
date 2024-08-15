@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Goods"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activities.edit_asset.EditAssetActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.add_asset.AddAssetActivity"
             android:exported="false" />
         <activity

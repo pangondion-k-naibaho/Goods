@@ -16,6 +16,8 @@ import com.goods.client.data.remote.ApiConfig
 import com.goods.client.data.repository.collection_location.CollectionLocationRepositoryImpl
 import com.goods.client.data.repository.collection_status.CollectionStatusRepositoryImpl
 import com.goods.client.data.repository.create_asset.CreateAssetRepositoryImpl
+import com.goods.client.data.repository.detail_asset.DetailAssetRepository
+import com.goods.client.data.repository.detail_asset.DetailAssetRepositoryImpl
 import com.goods.client.databinding.ActivityAddAssetBinding
 import com.goods.client.ui.activities.dashboard.DashboardActivity
 import com.goods.client.ui.activities.login.LoginActivity
@@ -55,8 +57,10 @@ class AddAssetActivity : AppCompatActivity() {
         val collectionStatusRepository = CollectionStatusRepositoryImpl(apiService)
         val collectionLocationRepository = CollectionLocationRepositoryImpl(apiService)
         val createAssetRepository = CreateAssetRepositoryImpl(apiService)
+        val detailAssetRepository = DetailAssetRepositoryImpl(apiService)
 
-        val factory = AddEditAssetViewModelFactory(collectionStatusRepository, collectionLocationRepository, createAssetRepository)
+        val factory = AddEditAssetViewModelFactory(collectionStatusRepository,
+            collectionLocationRepository, createAssetRepository, detailAssetRepository)
         addEditAssetViewModel = ViewModelProvider(this@AddAssetActivity, factory)[AddEditAssetViewModel::class.java]
 
         observeStatus()
@@ -75,12 +79,14 @@ class AddAssetActivity : AppCompatActivity() {
 
         addEditAssetViewModel.isUnauthorized.observe(this@AddAssetActivity, {
             if(it){
+                setLayoutForPopUp(true)
                 showPopUpNitification(
                     textTitle = getString(R.string.popupUnauthorizedTitle),
                     textDesc = getString(R.string.popupUnauthorizedDesc),
                     backgroundImage = R.drawable.ic_fail,
                     listener = object: PopUpNotificationListener{
                         override fun onPopUpClosed() {
+                            setLayoutForPopUp(false)
                             startActivity(LoginActivity.newIntent(this@AddAssetActivity))
                             this@AddAssetActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                             this@AddAssetActivity.finish()
@@ -92,12 +98,15 @@ class AddAssetActivity : AppCompatActivity() {
 
         addEditAssetViewModel.isCreateAssetFail.observe(this@AddAssetActivity, {
             if(it){
+                setLayoutForPopUp(true)
                 showPopUpNitification(
                     textTitle = getString(R.string.popupCreateAssetFailedTitle),
                     textDesc = getString(R.string.popupCreateAssetFailedDesc),
                     backgroundImage = R.drawable.ic_fail,
                     listener = object: PopUpNotificationListener{
-                        override fun onPopUpClosed() {}
+                        override fun onPopUpClosed() {
+                            setLayoutForPopUp(false)
+                        }
                     }
                 )
             }
@@ -106,12 +115,14 @@ class AddAssetActivity : AppCompatActivity() {
         addEditAssetViewModel.createAssetResponse2.observe(this@AddAssetActivity, { response->
             Log.d(TAG, "createAssetResponse: $response")
             if(response != null){
+                setLayoutForPopUp(true)
                 showPopUpNitification(
                     textTitle = getString(R.string.popupCreateAssetSuccessTitle),
                     textDesc = getString(R.string.popipCreateAssetSuccessDesc),
                     backgroundImage = R.drawable.ic_success,
                     listener = object: PopUpNotificationListener{
                         override fun onPopUpClosed() {
+                            setLayoutForPopUp(false)
                             startActivity(AddAssetActivity.newIntent(this@AddAssetActivity))
                             finish()
                         }
@@ -286,8 +297,8 @@ class AddAssetActivity : AppCompatActivity() {
         }
     }
 
-    override fun onRestart() {
-        super.onRestart()
+    override fun onDestroy() {
+        super.onDestroy()
         retrievedAssetName = null
         retrievedStatusId = null
         retrievedLocationId = null

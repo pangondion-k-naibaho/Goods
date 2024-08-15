@@ -9,6 +9,7 @@ import com.goods.client.data.model.response.asset_by_status.CollectionAssetStatu
 import com.goods.client.data.model.response.collection_location.CollectionLocationResponse
 import com.goods.client.data.model.response.collection_status.CollectionStatusResponse
 import com.goods.client.data.model.response.create_asset.CreateAssetResponse
+import com.goods.client.data.model.response.detail_asset.DetailAssetResponse
 import com.goods.client.data.model.response.login.LoginResponse
 import com.goods.client.data.model.response.logout.LogoutResponse
 import com.goods.client.data.model.response.profile.ProfileResponse
@@ -18,6 +19,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -61,6 +63,12 @@ interface ApiService {
         @Header("Authorization") authToken: String,
         @Body createAssetRequest: CreateAssetRequest
     ): Response<CreateAssetResponse>
+
+    @GET("asset/{id}")
+    suspend fun getDetailAsset(
+        @Header("Authorization") authToken: String,
+        @Path("id") id: String
+    ): Response<DetailAssetResponse>
 
     @GET("home/agg-asset-by-status/")
 

@@ -9,15 +9,18 @@ import com.goods.client.data.model.request.asset.CreateAssetRequest
 import com.goods.client.data.model.response.collection_location.CollectionLocationResponse
 import com.goods.client.data.model.response.collection_status.CollectionStatusResponse
 import com.goods.client.data.model.response.create_asset.CreateAssetResponse
+import com.goods.client.data.model.response.detail_asset.DetailAssetResponse
 import com.goods.client.data.repository.collection_location.CollectionLocationRepository
 import com.goods.client.data.repository.collection_status.CollectionStatusRepository
 import com.goods.client.data.repository.create_asset.CreateAssetRepository
+import com.goods.client.data.repository.detail_asset.DetailAssetRepository
 import kotlinx.coroutines.launch
 
 class AddEditAssetViewModel(
     private val collectionStatusRepository: CollectionStatusRepository,
     private val collectionLocationRepository: CollectionLocationRepository,
-    private val createAssetRepository: CreateAssetRepository
+    private val createAssetRepository: CreateAssetRepository,
+    private val detailAssetRepository: DetailAssetRepository
 ): ViewModel(){
     private val TAG = AddEditAssetViewModel::class.java.simpleName
 
@@ -32,6 +35,9 @@ class AddEditAssetViewModel(
 
     private var _createAssetResponse2 = MutableLiveData<CreateAssetResponse>()
     val createAssetResponse2: LiveData<CreateAssetResponse> = _createAssetResponse2
+
+    private var _detailAssetResponse = MutableLiveData<DetailAssetResponse>()
+    val detailAssetResponse: LiveData<DetailAssetResponse> = _detailAssetResponse
 
     private var _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -88,6 +94,20 @@ class AddEditAssetViewModel(
                 if(message!!.contains("401")) _isUnauthorized.value = true else _isCreateAssetFail.value = true
             }
             _isLoading.value = false
+        }
+    }
+
+    fun getDetailAsset(tokenAuth: String, id: String){
+        _isLoading.value = true
+        viewModelScope.launch {
+            val result = detailAssetRepository.getDetailAsset("Bearer $tokenAuth", id)
+            if(result.isSuccess){
+                _detailAssetResponse.value = result.getOrNull()
+                Log.d(TAG, "getDetailAsset Success")
+            }else{
+                val message = result.exceptionOrNull()!!.message
+                if(message!!.contains("401")) _isUnauthorized.value = true else _isFail.value = true
+            }
         }
     }
 }
