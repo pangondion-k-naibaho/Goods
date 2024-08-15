@@ -20,9 +20,13 @@
     <string name="popupLoginFailedTitle">Log In Failed</string>
     <string name="popupLoginSuccessDesc">You have successfully logged in.\nWelcome back!</string>
     <string name="popupLoginFailedDesc">Please check your credentials and try again</string>
-    <string name="popupLogoutSuccessTitle">Log Out Success</string>
+    <string name="popupQuestionLogoutTitle">Logout</string>
+    <string name="popupQuestionLogoutDesc">When you want to use this app,\nyou have to relogin, are you sure?</string>
+    <string name="btnPopupQuestionLogoutPositive">Logout</string>
+    <string name="btnPopupQuestionLogoutNegative">Cancel</string>
+    <string name="popupLogoutSuccessTitle">Success!</string>
     <string name="popupLogoutSuccessDesc">You\'ve successfully logged out.\nPlease come back anytime.</string>
-    <string name="popupLogoutFailedTitle">Log Out Failed</string>
+    <string name="popupLogoutFailedTitle">Failed!</string>
     <string name="popupLogoutFailedDesc">Unable to log you out at this time.\nPlease try again later.</string>
     <string name="popupUnauthorizedTitle">Session has Expired</string>
     <string name="popupUnauthorizedDesc">Please log in to continue</string>

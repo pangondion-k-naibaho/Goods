@@ -344,13 +344,11 @@ class UpdateDeleteAssetActivity : AppCompatActivity() {
                 textBtnNegative = getString(R.string.btnPopupQuestionDeleteAssetNegative),
                 listener = object: PopUpQuestionListener{
                     override fun onPostiveClicked() {
-                        closeOptionsMenu()
                         setLayoutForPopUp(false)
                         crudAssetViewModel.deleteAsset(userToken, deliveredId)
                     }
 
                     override fun onNegativeClicked() {
-                        closeOptionsMenu()
                         setLayoutForPopUp(false)
                     }
 

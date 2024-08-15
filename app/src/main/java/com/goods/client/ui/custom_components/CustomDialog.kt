@@ -83,12 +83,14 @@ fun Activity.showPopUpQuestion(
         btnPositive.apply {
             text = textBtnPositive
             setOnClickListener {
+                dialog.dismiss()
                 listener.onPostiveClicked()
             }
         }
         btnNegative.apply {
             text = textBtnNegative
             setOnClickListener {
+                dialog.dismiss()
                 listener.onNegativeClicked()
             }
         }

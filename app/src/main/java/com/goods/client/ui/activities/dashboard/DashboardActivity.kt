@@ -27,7 +27,9 @@ import com.goods.client.ui.activities.dashboard.fragments.HomeFragment
 import com.goods.client.ui.activities.login.LoginActivity
 import com.goods.client.ui.custom_components.HomeActionBar
 import com.goods.client.ui.custom_components.PopUpNotificationListener
+import com.goods.client.ui.custom_components.PopUpQuestionListener
 import com.goods.client.ui.custom_components.showPopUpNitification
+import com.goods.client.ui.custom_components.showPopUpQuestion
 import com.goods.client.ui.viewmodels.dashboard.DashboardViewModel
 import com.goods.client.ui.viewmodels.dashboard.DashboardViewModelFactory
 import com.google.android.material.navigation.NavigationBarView
@@ -102,41 +104,50 @@ class DashboardActivity : AppCompatActivity(), FragmentsDashboardCommunicator{
                 setEmail(response.email)
                 setListener(object: HomeActionBar.HomeActionbarListener{
                     override fun onLogoutClicked() {
+                        setLayoutForPopUp(true)
                         Log.d(TAG, "Logout")
-                        dashboardViewModel.logoutUser(sharedPreferences.getString(TOKEN_KEY, "unknown")!!)
+                        showPopUpQuestion(
+                            textTitle = getString(R.string.popupQuestionLogoutTitle),
+                            textDesc = getString(R.string.popupQuestionLogoutDesc),
+                            textBtnPositive = getString(R.string.btnPopupQuestionLogoutPositive),
+                            textBtnNegative = getString(R.string.btnPopupQuestionLogoutNegative),
+                            listener = object: PopUpQuestionListener{
+                                override fun onPostiveClicked() {
+                                    setLayoutForPopUp(false)
+                                    dashboardViewModel.logoutUser(sharedPreferences.getString(TOKEN_KEY, "unknown")!!)
 
-                        dashboardViewModel.logoutResponse.observe(this@DashboardActivity, {response->
-                            Log.d(TAG, "logout response:$response")
-                            if(response!=null){
-                                editor.remove(TOKEN_KEY)
-                                editor.remove(EMAIL_KEY)
-                                editor.remove(USERNAME_KEY)
-                                editor.remove(PASSWORD_KEY)
-                                editor.apply()
+                                    dashboardViewModel.logoutResponse.observe(this@DashboardActivity, {response->
+                                        Log.d(TAG, "logout response:$response")
+                                        if(response!=null){
+                                            editor.remove(TOKEN_KEY)
+                                            editor.remove(EMAIL_KEY)
+                                            editor.remove(USERNAME_KEY)
+                                            editor.remove(PASSWORD_KEY)
+                                            editor.apply()
 
-                                if(editor.commit()){
-                                    this@DashboardActivity.showPopUpNitification(
-                                        textTitle = getString(R.string.popupLogoutSuccessTitle),
-                                        textDesc = getString(R.string.popupLogoutSuccessDesc),
-                                        backgroundImage = R.drawable.ic_success,
-                                        listener = object: PopUpNotificationListener{
-                                            override fun onPopUpClosed() {
-                                                startActivity(LoginActivity.newIntent(this@DashboardActivity))
-                                                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-                                                finish()
+                                            if(editor.commit()){
+                                                this@DashboardActivity.showPopUpNitification(
+                                                    textTitle = getString(R.string.popupLogoutSuccessTitle),
+                                                    textDesc = getString(R.string.popupLogoutSuccessDesc),
+                                                    backgroundImage = R.drawable.ic_success,
+                                                    listener = object: PopUpNotificationListener{
+                                                        override fun onPopUpClosed() {
+                                                            startActivity(LoginActivity.newIntent(this@DashboardActivity))
+                                                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                                                            finish()
+                                                        }
+                                                    }
+                                                )
                                             }
                                         }
-                                    )
+                                    })
+                                }
+
+                                override fun onNegativeClicked() {
+                                    setLayoutForPopUp(false)
                                 }
                             }
-//                            else{
-//                                this@DashboardActivity.showPopUpNitification(
-//                                    textTitle = getString(R.string.popupLogoutFailedTitle),
-//                                    textDesc = getString(R.string.popupLogoutFailedDesc),
-//                                    backgroundImage = R.drawable.ic_fail,
-//                                )
-//                            }
-                        })
+                        )
                     }
                 })
             }
@@ -203,11 +214,31 @@ class DashboardActivity : AppCompatActivity(), FragmentsDashboardCommunicator{
     }
 
     override fun startLoading() {
-        binding.loadingLayout.visibility = View.VISIBLE
+        setLayoutForLoading(true)
     }
 
     override fun stopLoading() {
-        binding.loadingLayout.visibility = View.GONE
+        setLayoutForLoading(false)
+    }
+
+    private fun setLayoutForLoading(isLoading: Boolean){
+        if(isLoading) {
+            binding.loadingLayout.visibility = View.VISIBLE
+            binding.pbLoading.visibility = View.VISIBLE
+        } else {
+            binding.loadingLayout.visibility = View.GONE
+            binding.pbLoading.visibility = View.GONE
+        }
+    }
+
+    private fun setLayoutForPopUp(isShown: Boolean){
+        if(isShown){
+            binding.loadingLayout.visibility = View.VISIBLE
+            binding.pbLoading.visibility = View.GONE
+        }else{
+            binding.loadingLayout.visibility = View.GONE
+            binding.pbLoading.visibility = View.GONE
+        }
     }
 
     override fun updateProfile(username: String, email: String) {
