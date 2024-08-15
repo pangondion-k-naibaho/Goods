@@ -29,7 +29,9 @@
     <string name="popupCreateAssetSuccessTitle">Success!</string>
     <string name="popipCreateAssetSuccessDesc">Data has been submitted.</string>
     <string name="popupCreateAssetFailedTitle">Error!</string>
-    <string name="popupCreateAssetFailedDesc">Submission Failed. Please try again later</string>
+    <string name="popupCreateAssetFailedDesc">Submission failed. Please try again later.</string>
+    <string name="popupUpdateAssetSuccessDesc">Data has been update.</string>
+    <string name="popupUpdateAssetFailedDesc">Update data failed. Please try again later.</string>
     <string name="tvListAssetTitle">List Asset</string>
     <string name="tvAssetNameTitle">Asset Name</string>
     <string name="tvDummyAssetName">Dummy Aset</string>
@@ -56,4 +58,6 @@
     <string name="tvInputAssetName">Asset Name</string>
     <string name="tvInputHintAssetName">Input Name</string>
     <string name="cabInputAssetTitle">Input Asset</string>
+    <string name="btnTxtUpdateAsset">Save Update</string>
+    <string name="btnTxtDeleteAsset">Delete</string>
 </resources>

@@ -22,7 +22,7 @@ import com.goods.client.data.repository.logout.LogoutRepositoryImpl
 import com.goods.client.data.repository.profile.ProfileRepositoryImpl
 import com.goods.client.databinding.FragmentAssetBinding
 import com.goods.client.ui.activities.dashboard.FragmentsDashboardCommunicator
-import com.goods.client.ui.activities.edit_asset.EditAssetActivity
+import com.goods.client.ui.activities.update_asset.UpdateAssetActivity
 import com.goods.client.ui.custom_components.InputSearchView
 import com.goods.client.ui.rv_adapters.ItemAssetAdapter
 import com.goods.client.ui.viewmodels.asset.AssetViewModel
@@ -132,7 +132,7 @@ class AssetFragment : Fragment() {
                         override fun onUpdateClicked(item: ResultAssetResponse) {
                             Log.d(TAG, "updated data: ${item}")
                             this@AssetFragment.requireActivity().startActivity(
-                                EditAssetActivity.newIntent(this@AssetFragment.requireActivity(), item.id)
+                                UpdateAssetActivity.newIntent(this@AssetFragment.requireActivity(), item.id)
                             )
                             this@AssetFragment.requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                         }

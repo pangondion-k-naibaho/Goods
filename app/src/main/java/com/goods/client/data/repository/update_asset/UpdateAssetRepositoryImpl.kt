@@ -1,13 +1,17 @@
-package com.goods.client.data.repository.create_asset
+package com.goods.client.data.repository.update_asset
 
 import com.goods.client.data.model.request.create_update_asset.CreateUpdateAssetRequest
 import com.goods.client.data.model.response.create_update_asset.CreateUpdateAssetResponse
 import com.goods.client.data.remote.ApiService
 
-class CreateAssetRepositoryImpl(private val apiService: ApiService): CreateAssetRepository {
-    override suspend fun createAsset(tokenAuth: String, createUpdateAssetRequest: CreateUpdateAssetRequest): Result<CreateUpdateAssetResponse>{
+class UpdateAssetRepositoryImpl(private val apiService: ApiService): UpdateAssetRepository {
+    override suspend fun updateAsset(
+        tokenAuth: String,
+        id: String,
+        createUpdateAssetRequest: CreateUpdateAssetRequest
+    ): Result<CreateUpdateAssetResponse> {
         return try {
-            val response = apiService.createAsset2(tokenAuth, createUpdateAssetRequest)
+            val response = apiService.updateAsset(tokenAuth, id, createUpdateAssetRequest)
             if(response.isSuccessful || response.code() == 201){
                 Result.success(response.body()!!)
             }else{

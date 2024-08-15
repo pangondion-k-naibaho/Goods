@@ -16,8 +16,8 @@ import com.goods.client.data.remote.ApiConfig
 import com.goods.client.data.repository.collection_location.CollectionLocationRepositoryImpl
 import com.goods.client.data.repository.collection_status.CollectionStatusRepositoryImpl
 import com.goods.client.data.repository.create_asset.CreateAssetRepositoryImpl
-import com.goods.client.data.repository.detail_asset.DetailAssetRepository
 import com.goods.client.data.repository.detail_asset.DetailAssetRepositoryImpl
+import com.goods.client.data.repository.update_asset.UpdateAssetRepositoryImpl
 import com.goods.client.databinding.ActivityAddAssetBinding
 import com.goods.client.ui.activities.dashboard.DashboardActivity
 import com.goods.client.ui.activities.login.LoginActivity
@@ -26,8 +26,8 @@ import com.goods.client.ui.custom_components.InputDropdownView
 import com.goods.client.ui.custom_components.InputTextView
 import com.goods.client.ui.custom_components.PopUpNotificationListener
 import com.goods.client.ui.custom_components.showPopUpNitification
-import com.goods.client.ui.viewmodels.addedit_asset.AddEditAssetViewModel
-import com.goods.client.ui.viewmodels.addedit_asset.AddEditAssetViewModelFactory
+import com.goods.client.ui.viewmodels.adddetailupdate_asset.AddDetailUpdateAssetViewModel
+import com.goods.client.ui.viewmodels.adddetailupdate_asset.AddDetailUpdateAssetViewModelFactory
 import com.goods.client.utils.Extensions.Companion.retrieveListItemDropdownLocation
 import com.goods.client.utils.Extensions.Companion.retrieveListItemDropdownStatus
 
@@ -35,7 +35,7 @@ class AddAssetActivity : AppCompatActivity() {
     private val TAG = AddAssetActivity::class.java.simpleName
     private lateinit var binding: ActivityAddAssetBinding
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var addEditAssetViewModel: AddEditAssetViewModel
+    private lateinit var addDetailUpdateAssetViewModel: AddDetailUpdateAssetViewModel
     private var userToken = ""
 
     private var retrievedAssetName: String?= null
@@ -58,10 +58,13 @@ class AddAssetActivity : AppCompatActivity() {
         val collectionLocationRepository = CollectionLocationRepositoryImpl(apiService)
         val createAssetRepository = CreateAssetRepositoryImpl(apiService)
         val detailAssetRepository = DetailAssetRepositoryImpl(apiService)
+        val updateAssetRepository = UpdateAssetRepositoryImpl(apiService)
 
-        val factory = AddEditAssetViewModelFactory(collectionStatusRepository,
-            collectionLocationRepository, createAssetRepository, detailAssetRepository)
-        addEditAssetViewModel = ViewModelProvider(this@AddAssetActivity, factory)[AddEditAssetViewModel::class.java]
+        val factory = AddDetailUpdateAssetViewModelFactory(collectionStatusRepository,
+            collectionLocationRepository, createAssetRepository, detailAssetRepository,
+            updateAssetRepository)
+
+        addDetailUpdateAssetViewModel = ViewModelProvider(this@AddAssetActivity, factory)[AddDetailUpdateAssetViewModel::class.java]
 
         observeStatus()
         setUpActionbar()
@@ -69,15 +72,15 @@ class AddAssetActivity : AppCompatActivity() {
     }
 
     private fun observeStatus(){
-        addEditAssetViewModel.isLoading.observe(this@AddAssetActivity, {
+        addDetailUpdateAssetViewModel.isLoading.observe(this@AddAssetActivity, {
             setLayoutForLoading(it)
         })
 
-        addEditAssetViewModel.isFail.observe(this@AddAssetActivity, {
+        addDetailUpdateAssetViewModel.isFail.observe(this@AddAssetActivity, {
             Toast.makeText(this@AddAssetActivity, "Unable to retrieve data...", Toast.LENGTH_SHORT).show()
         })
 
-        addEditAssetViewModel.isUnauthorized.observe(this@AddAssetActivity, {
+        addDetailUpdateAssetViewModel.isUnauthorized.observe(this@AddAssetActivity, {
             if(it){
                 setLayoutForPopUp(true)
                 showPopUpNitification(
@@ -96,7 +99,7 @@ class AddAssetActivity : AppCompatActivity() {
             }
         })
 
-        addEditAssetViewModel.isCreateAssetFail.observe(this@AddAssetActivity, {
+        addDetailUpdateAssetViewModel.isCreateAssetFail.observe(this@AddAssetActivity, {
             if(it){
                 setLayoutForPopUp(true)
                 showPopUpNitification(
@@ -112,7 +115,7 @@ class AddAssetActivity : AppCompatActivity() {
             }
         })
 
-        addEditAssetViewModel.createAssetResponse2.observe(this@AddAssetActivity, { response->
+        addDetailUpdateAssetViewModel.createUpdateAssetResponse2.observe(this@AddAssetActivity, { response->
             Log.d(TAG, "createAssetResponse: $response")
             if(response != null){
                 setLayoutForPopUp(true)
@@ -149,10 +152,10 @@ class AddAssetActivity : AppCompatActivity() {
 
         userToken = sharedPreferences.getString(Constants.PREFERENCES.TOKEN_KEY, "")!!
 
-        addEditAssetViewModel.getStatusCollection(userToken)
-        addEditAssetViewModel.getLocationCollection(userToken)
+        addDetailUpdateAssetViewModel.getStatusCollection(userToken)
+        addDetailUpdateAssetViewModel.getLocationCollection(userToken)
 
-        addEditAssetViewModel.collectionStatusResponse.observe(this@AddAssetActivity, { response->
+        addDetailUpdateAssetViewModel.collectionStatusResponse.observe(this@AddAssetActivity, { response->
             Log.d(TAG, "collection Status Response: $response")
             val collectionItemDropdown = retrieveListItemDropdownStatus(response.results)
 
@@ -187,7 +190,7 @@ class AddAssetActivity : AppCompatActivity() {
             }
         })
 
-        addEditAssetViewModel.collectionLocationResponse.observe(this@AddAssetActivity, { response->
+        addDetailUpdateAssetViewModel.collectionLocationResponse.observe(this@AddAssetActivity, { response->
             Log.d(TAG, "collection Location response : $response")
 
             val collectionItemDropdown = retrieveListItemDropdownLocation(response.results)
@@ -268,7 +271,7 @@ class AddAssetActivity : AppCompatActivity() {
                 }
                 else ->{
                     //If all forms has alredy filled out, then hitting endpoint happens here
-                    addEditAssetViewModel.createAsset(userToken, retrievedAssetName!!, retrievedStatusId!!, retrievedLocationId!!)
+                    addDetailUpdateAssetViewModel.createAsset(userToken, retrievedAssetName!!, retrievedStatusId!!, retrievedLocationId!!)
                 }
             }
 

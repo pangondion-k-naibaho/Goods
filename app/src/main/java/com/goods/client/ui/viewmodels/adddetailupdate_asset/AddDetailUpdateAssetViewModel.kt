@@ -1,28 +1,30 @@
-package com.goods.client.ui.viewmodels.addedit_asset
+package com.goods.client.ui.viewmodels.adddetailupdate_asset
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.goods.client.data.model.request.asset.CreateAssetRequest
+import com.goods.client.data.model.request.create_update_asset.CreateUpdateAssetRequest
 import com.goods.client.data.model.response.collection_location.CollectionLocationResponse
 import com.goods.client.data.model.response.collection_status.CollectionStatusResponse
-import com.goods.client.data.model.response.create_asset.CreateAssetResponse
+import com.goods.client.data.model.response.create_update_asset.CreateUpdateAssetResponse
 import com.goods.client.data.model.response.detail_asset.DetailAssetResponse
 import com.goods.client.data.repository.collection_location.CollectionLocationRepository
 import com.goods.client.data.repository.collection_status.CollectionStatusRepository
 import com.goods.client.data.repository.create_asset.CreateAssetRepository
 import com.goods.client.data.repository.detail_asset.DetailAssetRepository
+import com.goods.client.data.repository.update_asset.UpdateAssetRepository
 import kotlinx.coroutines.launch
 
-class AddEditAssetViewModel(
+class AddDetailUpdateAssetViewModel(
     private val collectionStatusRepository: CollectionStatusRepository,
     private val collectionLocationRepository: CollectionLocationRepository,
     private val createAssetRepository: CreateAssetRepository,
-    private val detailAssetRepository: DetailAssetRepository
+    private val detailAssetRepository: DetailAssetRepository,
+    private val updateAssetRepository: UpdateAssetRepository,
 ): ViewModel(){
-    private val TAG = AddEditAssetViewModel::class.java.simpleName
+    private val TAG = AddDetailUpdateAssetViewModel::class.java.simpleName
 
     private var _collectionStatusResponse = MutableLiveData<CollectionStatusResponse>()
     val collectionStatusResponse: LiveData<CollectionStatusResponse> = _collectionStatusResponse
@@ -33,8 +35,11 @@ class AddEditAssetViewModel(
     private var _createAssetResponse = MutableLiveData<String>()
     val createAssetResponse: LiveData<String> = _createAssetResponse
 
-    private var _createAssetResponse2 = MutableLiveData<CreateAssetResponse>()
-    val createAssetResponse2: LiveData<CreateAssetResponse> = _createAssetResponse2
+    private var _createUpdateAssetResponse2 = MutableLiveData<CreateUpdateAssetResponse>()
+    val createUpdateAssetResponse2: LiveData<CreateUpdateAssetResponse> = _createUpdateAssetResponse2
+
+    private var _createUpdateAssetResponse3 = MutableLiveData<CreateUpdateAssetResponse>()
+    val createUpdateAssetResponse3: LiveData<CreateUpdateAssetResponse> = _createUpdateAssetResponse3
 
     private var _detailAssetResponse = MutableLiveData<DetailAssetResponse>()
     val detailAssetResponse: LiveData<DetailAssetResponse> = _detailAssetResponse
@@ -47,6 +52,9 @@ class AddEditAssetViewModel(
 
     private var _isCreateAssetFail = MutableLiveData<Boolean>()
     val isCreateAssetFail : LiveData<Boolean> = _isCreateAssetFail
+
+    private var _isUpdateAssetFail = MutableLiveData<Boolean>()
+    val isUpdateAssetFail : LiveData<Boolean> = _isUpdateAssetFail
 
     private var _isUnauthorized = MutableLiveData<Boolean>()
     val isUnauthorized: LiveData<Boolean> = _isUnauthorized
@@ -84,10 +92,10 @@ class AddEditAssetViewModel(
     fun createAsset(tokenAuth: String, assetName: String, assetStatusId: String, assetLocationId: String){
         _isLoading.value = true
         viewModelScope.launch {
-            val assetRequest = CreateAssetRequest(assetName, assetStatusId, assetLocationId)
+            val assetRequest = CreateUpdateAssetRequest(assetName, assetStatusId, assetLocationId)
             val result = createAssetRepository.createAsset("Bearer $tokenAuth", assetRequest)
             if(result.isSuccess){
-                _createAssetResponse2.value = result.getOrNull()
+                _createUpdateAssetResponse2.value = result.getOrNull()
                 Log.d(TAG, "createAsset Success")
             }else{
                 val message = result.exceptionOrNull()!!.message
@@ -108,6 +116,24 @@ class AddEditAssetViewModel(
                 val message = result.exceptionOrNull()!!.message
                 if(message!!.contains("401")) _isUnauthorized.value = true else _isFail.value = true
             }
+            _isLoading.value = false
+        }
+    }
+
+    fun updateAsset(tokenAuth: String, assetId: String, assetName: String, assetStatusId: String, assetLocationId: String){
+        _isLoading.value = true
+        viewModelScope.launch {
+            val assetRequest = CreateUpdateAssetRequest(assetName, assetStatusId, assetLocationId)
+            val result = updateAssetRepository.updateAsset(tokenAuth, assetId, assetRequest)
+            if(result.isSuccess){
+                _createUpdateAssetResponse3.value = result.getOrNull()
+                Log.d(TAG, "editAsset Success")
+            }else{
+                val message = result.exceptionOrNull()!!.message
+                Log.e(TAG, "$message")
+                if(message!!.contains("401")) _isUnauthorized.value = true else _isUpdateAssetFail.value = true
+            }
+            _isLoading.value = false
         }
     }
 }

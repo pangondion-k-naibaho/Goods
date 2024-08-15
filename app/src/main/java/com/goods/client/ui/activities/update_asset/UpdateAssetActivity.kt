@@ -1,4 +1,4 @@
-package com.goods.client.ui.activities.edit_asset
+package com.goods.client.ui.activities.update_asset
 
 import android.content.Context
 import android.content.Intent
@@ -10,7 +10,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.goods.client.R
-import com.goods.client.data.Constants
 import com.goods.client.data.Constants.PREFERENCES.Companion.APP_PREFERENCES
 import com.goods.client.data.Constants.PREFERENCES.Companion.TOKEN_KEY
 import com.goods.client.data.model.other.ItemDropdown
@@ -19,7 +18,9 @@ import com.goods.client.data.repository.collection_location.CollectionLocationRe
 import com.goods.client.data.repository.collection_status.CollectionStatusRepositoryImpl
 import com.goods.client.data.repository.create_asset.CreateAssetRepositoryImpl
 import com.goods.client.data.repository.detail_asset.DetailAssetRepositoryImpl
+import com.goods.client.data.repository.update_asset.UpdateAssetRepositoryImpl
 import com.goods.client.databinding.ActivityAddAssetBinding
+import com.goods.client.ui.activities.add_asset.AddAssetActivity
 import com.goods.client.ui.activities.dashboard.DashboardActivity
 import com.goods.client.ui.activities.login.LoginActivity
 import com.goods.client.ui.custom_components.CustomActionbar
@@ -27,15 +28,15 @@ import com.goods.client.ui.custom_components.InputDropdownView
 import com.goods.client.ui.custom_components.InputTextView
 import com.goods.client.ui.custom_components.PopUpNotificationListener
 import com.goods.client.ui.custom_components.showPopUpNitification
-import com.goods.client.ui.viewmodels.addedit_asset.AddEditAssetViewModel
-import com.goods.client.ui.viewmodels.addedit_asset.AddEditAssetViewModelFactory
+import com.goods.client.ui.viewmodels.adddetailupdate_asset.AddDetailUpdateAssetViewModel
+import com.goods.client.ui.viewmodels.adddetailupdate_asset.AddDetailUpdateAssetViewModelFactory
 import com.goods.client.utils.Extensions
 
-class EditAssetActivity : AppCompatActivity() {
-    private val TAG = EditAssetActivity::class.java.simpleName
+class UpdateAssetActivity : AppCompatActivity() {
+    private val TAG = UpdateAssetActivity::class.java.simpleName
     private lateinit var binding: ActivityAddAssetBinding
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var addEditAssetViewModel: AddEditAssetViewModel
+    private lateinit var addDetailUpdateAssetViewModel: AddDetailUpdateAssetViewModel
     private var userToken = ""
     private var deliveredId = ""
 
@@ -47,7 +48,7 @@ class EditAssetActivity : AppCompatActivity() {
 
     companion object{
         const val EXTRA_ID = "EXTRA_ID"
-        fun newIntent(context: Context, id: String): Intent = Intent(context, EditAssetActivity::class.java)
+        fun newIntent(context: Context, id: String): Intent = Intent(context, UpdateAssetActivity::class.java)
             .putExtra(EXTRA_ID, id)
     }
 
@@ -63,26 +64,28 @@ class EditAssetActivity : AppCompatActivity() {
         val collectionLocationRepository = CollectionLocationRepositoryImpl(apiService)
         val createAssetRepository = CreateAssetRepositoryImpl(apiService)
         val detailAssetRepository = DetailAssetRepositoryImpl(apiService)
+        val updateAssetRepository = UpdateAssetRepositoryImpl(apiService)
 
-        val factory = AddEditAssetViewModelFactory(collectionStatusRepository,
-            collectionLocationRepository, createAssetRepository, detailAssetRepository)
-        addEditAssetViewModel = ViewModelProvider(this@EditAssetActivity, factory)[AddEditAssetViewModel::class.java]
+        val factory = AddDetailUpdateAssetViewModelFactory(collectionStatusRepository,
+            collectionLocationRepository, createAssetRepository, detailAssetRepository,
+            updateAssetRepository)
+        addDetailUpdateAssetViewModel = ViewModelProvider(this@UpdateAssetActivity, factory)[AddDetailUpdateAssetViewModel::class.java]
 
         observeStatus()
-        setUpActionbar()
+        setUpActionbarnBottomButton()
         initView()
     }
 
     private fun observeStatus(){
-        addEditAssetViewModel.isLoading.observe(this@EditAssetActivity, {
+        addDetailUpdateAssetViewModel.isLoading.observe(this@UpdateAssetActivity, {
             setLayoutForLoading(it)
         })
 
-        addEditAssetViewModel.isFail.observe(this@EditAssetActivity, {
-            Toast.makeText(this@EditAssetActivity, "Unable to retrieve data...", Toast.LENGTH_SHORT).show()
+        addDetailUpdateAssetViewModel.isFail.observe(this@UpdateAssetActivity, {
+            Toast.makeText(this@UpdateAssetActivity, "Unable to retrieve data...", Toast.LENGTH_SHORT).show()
         })
 
-        addEditAssetViewModel.isUnauthorized.observe(this@EditAssetActivity, {
+        addDetailUpdateAssetViewModel.isUnauthorized.observe(this@UpdateAssetActivity, {
             if(it){
                 setLayoutForPopUp(true)
                 showPopUpNitification(
@@ -92,9 +95,44 @@ class EditAssetActivity : AppCompatActivity() {
                     listener = object: PopUpNotificationListener {
                         override fun onPopUpClosed() {
                             setLayoutForPopUp(false)
-                            startActivity(LoginActivity.newIntent(this@EditAssetActivity))
-                            this@EditAssetActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-                            this@EditAssetActivity.finish()
+                            startActivity(LoginActivity.newIntent(this@UpdateAssetActivity))
+                            this@UpdateAssetActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                            this@UpdateAssetActivity.finish()
+                        }
+                    }
+                )
+            }
+        })
+
+        addDetailUpdateAssetViewModel.isUpdateAssetFail.observe(this@UpdateAssetActivity, {
+            if(it){
+                setLayoutForPopUp(true)
+                showPopUpNitification(
+                    textTitle = getString(R.string.popupCreateAssetFailedTitle),
+                    textDesc = getString(R.string.popupUpdateAssetFailedDesc),
+                    backgroundImage = R.drawable.ic_fail,
+                    listener = object: PopUpNotificationListener{
+                        override fun onPopUpClosed() {
+                            setLayoutForPopUp(false)
+                        }
+                    }
+                )
+            }
+        })
+
+        addDetailUpdateAssetViewModel.createUpdateAssetResponse3.observe(this@UpdateAssetActivity, { response->
+            Log.d(TAG, "createAssetResponse: $response")
+            if(response != null){
+                setLayoutForPopUp(true)
+                showPopUpNitification(
+                    textTitle = getString(R.string.popupCreateAssetSuccessTitle),
+                    textDesc = getString(R.string.popupUpdateAssetSuccessDesc),
+                    backgroundImage = R.drawable.ic_success,
+                    listener = object: PopUpNotificationListener{
+                        override fun onPopUpClosed() {
+                            setLayoutForPopUp(false)
+                            startActivity(DashboardActivity.newIntent(this@UpdateAssetActivity))
+                            finish()
                         }
                     }
                 )
@@ -103,28 +141,32 @@ class EditAssetActivity : AppCompatActivity() {
 
     }
 
-    private fun setUpActionbar(){
+    private fun setUpActionbarnBottomButton(){
         binding.cabAddAsset.apply {
             setTitle(getString(R.string.cabInputAssetTitle))
             setListener(object: CustomActionbar.ActionbarListener{
                 override fun onButtonLeftClicked() {
-                    startActivity(DashboardActivity.newIntent(this@EditAssetActivity))
+                    startActivity(DashboardActivity.newIntent(this@UpdateAssetActivity))
                     finish()
                 }
             })
         }
+
+        binding.btnSubmitAsset.visibility = View.GONE
+        binding.btnSaveEdit.visibility = View.VISIBLE
+        binding.btnDeleteEdit.visibility = View.VISIBLE
     }
 
     private fun initView(){
-        sharedPreferences = this@EditAssetActivity.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
+        sharedPreferences = this@UpdateAssetActivity.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
 
         userToken = sharedPreferences.getString(TOKEN_KEY, "")!!
 
-        addEditAssetViewModel.getDetailAsset(userToken, deliveredId)
-        addEditAssetViewModel.getStatusCollection(userToken)
-        addEditAssetViewModel.getLocationCollection(userToken)
+        addDetailUpdateAssetViewModel.getDetailAsset(userToken, deliveredId)
+        addDetailUpdateAssetViewModel.getStatusCollection(userToken)
+        addDetailUpdateAssetViewModel.getLocationCollection(userToken)
 
-        addEditAssetViewModel.detailAssetResponse.observe(this@EditAssetActivity, {response->
+        addDetailUpdateAssetViewModel.detailAssetResponse.observe(this@UpdateAssetActivity, { response->
             val detailAssetResponse = response
 
             retrievedAssetName = response.name
@@ -133,7 +175,7 @@ class EditAssetActivity : AppCompatActivity() {
             selectedLocation = response.location.name
             selectedStatus = response.status.name
 
-            addEditAssetViewModel.collectionStatusResponse.observe(this@EditAssetActivity, {response->
+            addDetailUpdateAssetViewModel.collectionStatusResponse.observe(this@UpdateAssetActivity, { response->
 
                 val collectionItemDropdown = Extensions.retrieveListItemDropdownStatus(response.results)
 
@@ -168,7 +210,7 @@ class EditAssetActivity : AppCompatActivity() {
                 }
             })
 
-            addEditAssetViewModel.collectionLocationResponse.observe(this@EditAssetActivity,{response->
+            addDetailUpdateAssetViewModel.collectionLocationResponse.observe(this@UpdateAssetActivity,{ response->
                 val collectionItemDropdown =
                     Extensions.retrieveListItemDropdownLocation(response.results)
 
@@ -214,12 +256,45 @@ class EditAssetActivity : AppCompatActivity() {
             }
         })
 
-        binding.btnSubmitAsset.setOnClickListener {
+        binding.btnSaveEdit.setOnClickListener {
             retrievedAssetName = binding.itvAssetName.getText()
 
             val assetNameisNull = retrievedAssetName.isNullOrEmpty()
             val assetStatusisNull = selectedStatus.isNullOrEmpty()
             val assetLocationisNull = selectedLocation.isNullOrEmpty()
+
+            when{
+                (assetNameisNull && assetStatusisNull && assetLocationisNull) ->{
+                    binding.itvAssetName.setOnBlankWarning()
+                    binding.idvStatusAsset.setError()
+                    binding.idvLocationAsset.setError()
+                }
+                (!assetNameisNull && assetStatusisNull && assetLocationisNull) ->{
+                    binding.idvStatusAsset.setError()
+                    binding.idvLocationAsset.setError()
+                }
+                (assetNameisNull && !assetStatusisNull && assetLocationisNull) ->{
+                    binding.itvAssetName.setOnBlankWarning()
+                    binding.idvLocationAsset.setError()
+                }
+                (assetNameisNull && assetStatusisNull && !assetLocationisNull) ->{
+                    binding.itvAssetName.setOnBlankWarning()
+                    binding.idvStatusAsset.setError()
+                }
+                (!assetNameisNull && !assetStatusisNull && assetLocationisNull) ->{
+                    binding.idvLocationAsset.setError()
+                }
+                (assetNameisNull && !assetStatusisNull && !assetLocationisNull) ->{
+                    binding.itvAssetName.setOnBlankWarning()
+                }
+                (!assetNameisNull && assetStatusisNull && !assetLocationisNull) ->{
+                    binding.idvStatusAsset.setError()
+                }
+                else ->{
+                    //If all forms has alredy filled out, then hitting endpoint happens here
+                    addDetailUpdateAssetViewModel.updateAsset(userToken, deliveredId, retrievedAssetName!!, retrievedStatusId!!, retrievedLocationId!!)
+                }
+            }
 
             Log.d(TAG, "id_asset: $deliveredId, name: $retrievedAssetName, statusId: $retrievedStatusId, locationId: $retrievedLocationId")
         }
