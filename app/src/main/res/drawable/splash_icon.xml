@@ -1,0 +1,9 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/goods_logo_vertical_black"
+            android:tileMode="disabled"
+            android:scaleType="fitCenter"/>
+    </item>
+</layer-list>
