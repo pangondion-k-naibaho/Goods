@@ -1,4 +1,4 @@
-package com.goods.client.ui.viewmodels.adddetailupdate_asset
+package com.goods.client.ui.viewmodels.crud_asset
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -13,18 +13,20 @@ import com.goods.client.data.model.response.detail_asset.DetailAssetResponse
 import com.goods.client.data.repository.collection_location.CollectionLocationRepository
 import com.goods.client.data.repository.collection_status.CollectionStatusRepository
 import com.goods.client.data.repository.create_asset.CreateAssetRepository
+import com.goods.client.data.repository.delete_asset.DeleteAssetRepository
 import com.goods.client.data.repository.detail_asset.DetailAssetRepository
 import com.goods.client.data.repository.update_asset.UpdateAssetRepository
 import kotlinx.coroutines.launch
 
-class AddDetailUpdateAssetViewModel(
+class CrudAssetViewModel(
     private val collectionStatusRepository: CollectionStatusRepository,
     private val collectionLocationRepository: CollectionLocationRepository,
     private val createAssetRepository: CreateAssetRepository,
     private val detailAssetRepository: DetailAssetRepository,
     private val updateAssetRepository: UpdateAssetRepository,
+    private val deleteAssetRepository: DeleteAssetRepository
 ): ViewModel(){
-    private val TAG = AddDetailUpdateAssetViewModel::class.java.simpleName
+    private val TAG = CrudAssetViewModel::class.java.simpleName
 
     private var _collectionStatusResponse = MutableLiveData<CollectionStatusResponse>()
     val collectionStatusResponse: LiveData<CollectionStatusResponse> = _collectionStatusResponse
@@ -44,6 +46,9 @@ class AddDetailUpdateAssetViewModel(
     private var _detailAssetResponse = MutableLiveData<DetailAssetResponse>()
     val detailAssetResponse: LiveData<DetailAssetResponse> = _detailAssetResponse
 
+    private var _deleteAssetResponse = MutableLiveData<Unit>()
+    val deleteAssetResponse : LiveData<Unit> = _deleteAssetResponse
+
     private var _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -55,6 +60,9 @@ class AddDetailUpdateAssetViewModel(
 
     private var _isUpdateAssetFail = MutableLiveData<Boolean>()
     val isUpdateAssetFail : LiveData<Boolean> = _isUpdateAssetFail
+
+    private var _isDeleteAssetFail = MutableLiveData<Boolean>()
+    val isDeleteAssetFail: LiveData<Boolean> = _isDeleteAssetFail
 
     private var _isUnauthorized = MutableLiveData<Boolean>()
     val isUnauthorized: LiveData<Boolean> = _isUnauthorized
@@ -124,7 +132,7 @@ class AddDetailUpdateAssetViewModel(
         _isLoading.value = true
         viewModelScope.launch {
             val assetRequest = CreateUpdateAssetRequest(assetName, assetStatusId, assetLocationId)
-            val result = updateAssetRepository.updateAsset(tokenAuth, assetId, assetRequest)
+            val result = updateAssetRepository.updateAsset("Bearer $tokenAuth", assetId, assetRequest)
             if(result.isSuccess){
                 _createUpdateAssetResponse3.value = result.getOrNull()
                 Log.d(TAG, "editAsset Success")
@@ -132,6 +140,22 @@ class AddDetailUpdateAssetViewModel(
                 val message = result.exceptionOrNull()!!.message
                 Log.e(TAG, "$message")
                 if(message!!.contains("401")) _isUnauthorized.value = true else _isUpdateAssetFail.value = true
+            }
+            _isLoading.value = false
+        }
+    }
+
+    fun deleteAsset(tokenAuth: String, assetId: String){
+        _isLoading.value = true
+        viewModelScope.launch {
+            val result = deleteAssetRepository.deleteAsset("Bearer $tokenAuth", assetId)
+            if(result.isSuccess){
+                _deleteAssetResponse.value = result.getOrNull()
+                Log.d(TAG, "deleteAsset Success")
+            }else{
+                val message = result.exceptionOrNull()!!.message
+                Log.e(TAG, "$message")
+                if(message!!.contains("401")) _isUnauthorized.value = true else _isDeleteAssetFail.value = true
             }
             _isLoading.value = false
         }

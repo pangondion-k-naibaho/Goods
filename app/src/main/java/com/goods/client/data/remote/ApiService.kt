@@ -15,6 +15,7 @@ import com.goods.client.data.model.response.logout.LogoutResponse
 import com.goods.client.data.model.response.profile.ProfileResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -82,6 +83,12 @@ interface ApiService {
         @Path("id") id: String,
         @Body createUpdateAssetRequest: CreateUpdateAssetRequest
     ): Response<CreateUpdateAssetResponse>
+
+    @DELETE("asset/{id}")
+    suspend fun deleteAsset(
+        @Header("Authorization") authToken: String,
+        @Path("id") id: String
+    ): Response<Unit>
 
     //Asset By Status
 

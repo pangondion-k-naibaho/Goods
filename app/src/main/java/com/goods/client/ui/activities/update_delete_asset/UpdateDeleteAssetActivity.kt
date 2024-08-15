@@ -1,4 +1,4 @@
-package com.goods.client.ui.activities.update_asset
+package com.goods.client.ui.activities.update_delete_asset
 
 import android.content.Context
 import android.content.Intent
@@ -17,26 +17,28 @@ import com.goods.client.data.remote.ApiConfig
 import com.goods.client.data.repository.collection_location.CollectionLocationRepositoryImpl
 import com.goods.client.data.repository.collection_status.CollectionStatusRepositoryImpl
 import com.goods.client.data.repository.create_asset.CreateAssetRepositoryImpl
+import com.goods.client.data.repository.delete_asset.DeleteAssetRepositoryImpl
 import com.goods.client.data.repository.detail_asset.DetailAssetRepositoryImpl
 import com.goods.client.data.repository.update_asset.UpdateAssetRepositoryImpl
 import com.goods.client.databinding.ActivityAddAssetBinding
-import com.goods.client.ui.activities.add_asset.AddAssetActivity
 import com.goods.client.ui.activities.dashboard.DashboardActivity
 import com.goods.client.ui.activities.login.LoginActivity
 import com.goods.client.ui.custom_components.CustomActionbar
 import com.goods.client.ui.custom_components.InputDropdownView
 import com.goods.client.ui.custom_components.InputTextView
 import com.goods.client.ui.custom_components.PopUpNotificationListener
+import com.goods.client.ui.custom_components.PopUpQuestionListener
 import com.goods.client.ui.custom_components.showPopUpNitification
-import com.goods.client.ui.viewmodels.adddetailupdate_asset.AddDetailUpdateAssetViewModel
-import com.goods.client.ui.viewmodels.adddetailupdate_asset.AddDetailUpdateAssetViewModelFactory
+import com.goods.client.ui.custom_components.showPopUpQuestion
+import com.goods.client.ui.viewmodels.crud_asset.CrudAssetViewModel
+import com.goods.client.ui.viewmodels.crud_asset.CrudAssetViewModelFactory
 import com.goods.client.utils.Extensions
 
-class UpdateAssetActivity : AppCompatActivity() {
-    private val TAG = UpdateAssetActivity::class.java.simpleName
+class UpdateDeleteAssetActivity : AppCompatActivity() {
+    private val TAG = UpdateDeleteAssetActivity::class.java.simpleName
     private lateinit var binding: ActivityAddAssetBinding
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var addDetailUpdateAssetViewModel: AddDetailUpdateAssetViewModel
+    private lateinit var crudAssetViewModel: CrudAssetViewModel
     private var userToken = ""
     private var deliveredId = ""
 
@@ -48,7 +50,7 @@ class UpdateAssetActivity : AppCompatActivity() {
 
     companion object{
         const val EXTRA_ID = "EXTRA_ID"
-        fun newIntent(context: Context, id: String): Intent = Intent(context, UpdateAssetActivity::class.java)
+        fun newIntent(context: Context, id: String): Intent = Intent(context, UpdateDeleteAssetActivity::class.java)
             .putExtra(EXTRA_ID, id)
     }
 
@@ -65,11 +67,12 @@ class UpdateAssetActivity : AppCompatActivity() {
         val createAssetRepository = CreateAssetRepositoryImpl(apiService)
         val detailAssetRepository = DetailAssetRepositoryImpl(apiService)
         val updateAssetRepository = UpdateAssetRepositoryImpl(apiService)
+        val deleteAssetRepository = DeleteAssetRepositoryImpl(apiService)
 
-        val factory = AddDetailUpdateAssetViewModelFactory(collectionStatusRepository,
+        val factory = CrudAssetViewModelFactory(collectionStatusRepository,
             collectionLocationRepository, createAssetRepository, detailAssetRepository,
-            updateAssetRepository)
-        addDetailUpdateAssetViewModel = ViewModelProvider(this@UpdateAssetActivity, factory)[AddDetailUpdateAssetViewModel::class.java]
+            updateAssetRepository, deleteAssetRepository)
+        crudAssetViewModel = ViewModelProvider(this@UpdateDeleteAssetActivity, factory)[CrudAssetViewModel::class.java]
 
         observeStatus()
         setUpActionbarnBottomButton()
@@ -77,15 +80,15 @@ class UpdateAssetActivity : AppCompatActivity() {
     }
 
     private fun observeStatus(){
-        addDetailUpdateAssetViewModel.isLoading.observe(this@UpdateAssetActivity, {
+        crudAssetViewModel.isLoading.observe(this@UpdateDeleteAssetActivity, {
             setLayoutForLoading(it)
         })
 
-        addDetailUpdateAssetViewModel.isFail.observe(this@UpdateAssetActivity, {
-            Toast.makeText(this@UpdateAssetActivity, "Unable to retrieve data...", Toast.LENGTH_SHORT).show()
+        crudAssetViewModel.isFail.observe(this@UpdateDeleteAssetActivity, {
+            Toast.makeText(this@UpdateDeleteAssetActivity, "Unable to retrieve data...", Toast.LENGTH_SHORT).show()
         })
 
-        addDetailUpdateAssetViewModel.isUnauthorized.observe(this@UpdateAssetActivity, {
+        crudAssetViewModel.isUnauthorized.observe(this@UpdateDeleteAssetActivity, {
             if(it){
                 setLayoutForPopUp(true)
                 showPopUpNitification(
@@ -95,16 +98,16 @@ class UpdateAssetActivity : AppCompatActivity() {
                     listener = object: PopUpNotificationListener {
                         override fun onPopUpClosed() {
                             setLayoutForPopUp(false)
-                            startActivity(LoginActivity.newIntent(this@UpdateAssetActivity))
-                            this@UpdateAssetActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-                            this@UpdateAssetActivity.finish()
+                            startActivity(LoginActivity.newIntent(this@UpdateDeleteAssetActivity))
+                            this@UpdateDeleteAssetActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                            this@UpdateDeleteAssetActivity.finish()
                         }
                     }
                 )
             }
         })
 
-        addDetailUpdateAssetViewModel.isUpdateAssetFail.observe(this@UpdateAssetActivity, {
+        crudAssetViewModel.isUpdateAssetFail.observe(this@UpdateDeleteAssetActivity, {
             if(it){
                 setLayoutForPopUp(true)
                 showPopUpNitification(
@@ -120,7 +123,7 @@ class UpdateAssetActivity : AppCompatActivity() {
             }
         })
 
-        addDetailUpdateAssetViewModel.createUpdateAssetResponse3.observe(this@UpdateAssetActivity, { response->
+        crudAssetViewModel.createUpdateAssetResponse3.observe(this@UpdateDeleteAssetActivity, { response->
             Log.d(TAG, "createAssetResponse: $response")
             if(response != null){
                 setLayoutForPopUp(true)
@@ -131,12 +134,45 @@ class UpdateAssetActivity : AppCompatActivity() {
                     listener = object: PopUpNotificationListener{
                         override fun onPopUpClosed() {
                             setLayoutForPopUp(false)
-                            startActivity(DashboardActivity.newIntent(this@UpdateAssetActivity))
+                            startActivity(DashboardActivity.newIntent(this@UpdateDeleteAssetActivity))
                             finish()
                         }
                     }
                 )
             }
+        })
+
+        crudAssetViewModel.deleteAssetResponse.observe(this@UpdateDeleteAssetActivity, {
+            setLayoutForPopUp(true)
+            showPopUpNitification(
+                textTitle = getString(R.string.popupDeleteAssetSuccessTitle),
+                textDesc = getString(R.string.popupDeleteAssetSuccessDesc),
+                backgroundImage = R.drawable.ic_success,
+                listener = object: PopUpNotificationListener{
+                    override fun onPopUpClosed() {
+                        setLayoutForPopUp(false)
+                        startActivity(
+                            DashboardActivity.newIntent(this@UpdateDeleteAssetActivity)
+                        )
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                        finish()
+                    }
+                }
+            )
+        })
+
+        crudAssetViewModel.isDeleteAssetFail.observe(this@UpdateDeleteAssetActivity, {
+            setLayoutForPopUp(true)
+            showPopUpNitification(
+                textTitle = getString(R.string.popupDeleteAssetSuccessTitle),
+                textDesc = getString(R.string.popupDeleteAssetSuccessDesc),
+                backgroundImage = R.drawable.ic_success,
+                listener = object: PopUpNotificationListener{
+                    override fun onPopUpClosed() {
+                        setLayoutForPopUp(false)
+                    }
+                }
+            )
         })
 
     }
@@ -146,7 +182,7 @@ class UpdateAssetActivity : AppCompatActivity() {
             setTitle(getString(R.string.cabInputAssetTitle))
             setListener(object: CustomActionbar.ActionbarListener{
                 override fun onButtonLeftClicked() {
-                    startActivity(DashboardActivity.newIntent(this@UpdateAssetActivity))
+                    startActivity(DashboardActivity.newIntent(this@UpdateDeleteAssetActivity))
                     finish()
                 }
             })
@@ -158,15 +194,15 @@ class UpdateAssetActivity : AppCompatActivity() {
     }
 
     private fun initView(){
-        sharedPreferences = this@UpdateAssetActivity.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
+        sharedPreferences = this@UpdateDeleteAssetActivity.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
 
         userToken = sharedPreferences.getString(TOKEN_KEY, "")!!
 
-        addDetailUpdateAssetViewModel.getDetailAsset(userToken, deliveredId)
-        addDetailUpdateAssetViewModel.getStatusCollection(userToken)
-        addDetailUpdateAssetViewModel.getLocationCollection(userToken)
+        crudAssetViewModel.getDetailAsset(userToken, deliveredId)
+        crudAssetViewModel.getStatusCollection(userToken)
+        crudAssetViewModel.getLocationCollection(userToken)
 
-        addDetailUpdateAssetViewModel.detailAssetResponse.observe(this@UpdateAssetActivity, { response->
+        crudAssetViewModel.detailAssetResponse.observe(this@UpdateDeleteAssetActivity, { response->
             val detailAssetResponse = response
 
             retrievedAssetName = response.name
@@ -175,7 +211,7 @@ class UpdateAssetActivity : AppCompatActivity() {
             selectedLocation = response.location.name
             selectedStatus = response.status.name
 
-            addDetailUpdateAssetViewModel.collectionStatusResponse.observe(this@UpdateAssetActivity, { response->
+            crudAssetViewModel.collectionStatusResponse.observe(this@UpdateDeleteAssetActivity, { response->
 
                 val collectionItemDropdown = Extensions.retrieveListItemDropdownStatus(response.results)
 
@@ -210,7 +246,7 @@ class UpdateAssetActivity : AppCompatActivity() {
                 }
             })
 
-            addDetailUpdateAssetViewModel.collectionLocationResponse.observe(this@UpdateAssetActivity,{ response->
+            crudAssetViewModel.collectionLocationResponse.observe(this@UpdateDeleteAssetActivity,{ response->
                 val collectionItemDropdown =
                     Extensions.retrieveListItemDropdownLocation(response.results)
 
@@ -292,11 +328,34 @@ class UpdateAssetActivity : AppCompatActivity() {
                 }
                 else ->{
                     //If all forms has alredy filled out, then hitting endpoint happens here
-                    addDetailUpdateAssetViewModel.updateAsset(userToken, deliveredId, retrievedAssetName!!, retrievedStatusId!!, retrievedLocationId!!)
+                    crudAssetViewModel.updateAsset(userToken, deliveredId, retrievedAssetName!!, retrievedStatusId!!, retrievedLocationId!!)
                 }
             }
 
             Log.d(TAG, "id_asset: $deliveredId, name: $retrievedAssetName, statusId: $retrievedStatusId, locationId: $retrievedLocationId")
+        }
+
+        binding.btnDeleteEdit.setOnClickListener {
+            setLayoutForPopUp(true)
+            showPopUpQuestion(
+                textTitle = getString(R.string.popupQuestionDeleteAssetTitle),
+                textDesc = getString(R.string.popupQuestionDeleteAssetDesc),
+                textBtnPositive = getString(R.string.btnPopupQuestionDeleteAssetPositive),
+                textBtnNegative = getString(R.string.btnPopupQuestionDeleteAssetNegative),
+                listener = object: PopUpQuestionListener{
+                    override fun onPostiveClicked() {
+                        closeOptionsMenu()
+                        setLayoutForPopUp(false)
+                        crudAssetViewModel.deleteAsset(userToken, deliveredId)
+                    }
+
+                    override fun onNegativeClicked() {
+                        closeOptionsMenu()
+                        setLayoutForPopUp(false)
+                    }
+
+                }
+            )
         }
     }
 

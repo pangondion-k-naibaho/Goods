@@ -11,10 +11,17 @@ import android.view.Window
 import com.bumptech.glide.Glide
 import com.goods.client.R
 import com.goods.client.databinding.PopupNotificationLayoutBinding
+import com.goods.client.databinding.PopupQuestionLayoutBinding
 
 
 interface PopUpNotificationListener{
     fun onPopUpClosed()
+}
+
+interface PopUpQuestionListener{
+    fun onPostiveClicked()
+
+    fun onNegativeClicked()
 }
 
 fun Activity.showPopUpNitification(
@@ -49,5 +56,42 @@ fun Activity.showPopUpNitification(
         }, popUpDuration!!)
         if(!isFinishing) dialog.show()
 
+    }
+}
+
+fun Activity.showPopUpQuestion(
+    textTitle: String,
+    textDesc: String,
+    textBtnPositive: String,
+    textBtnNegative: String,
+    listener: PopUpQuestionListener
+){
+    val dialog = Dialog(this)
+    val binding = PopupQuestionLayoutBinding.bind(layoutInflater.inflate(R.layout.popup_question_layout, null))
+
+    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+    dialog.window?.setLayout(
+        ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT
+    )
+    dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    dialog.setContentView(binding.root)
+    dialog.setCancelable(false)
+    binding.apply {
+        tvPopUpTitle.text = textTitle
+        tvPopUpDesc.text = textDesc
+        btnPositive.apply {
+            text = textBtnPositive
+            setOnClickListener {
+                listener.onPostiveClicked()
+            }
+        }
+        btnNegative.apply {
+            text = textBtnNegative
+            setOnClickListener {
+                listener.onNegativeClicked()
+            }
+        }
+        if(!isFinishing) dialog.show()
     }
 }

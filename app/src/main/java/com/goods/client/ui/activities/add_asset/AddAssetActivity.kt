@@ -16,6 +16,7 @@ import com.goods.client.data.remote.ApiConfig
 import com.goods.client.data.repository.collection_location.CollectionLocationRepositoryImpl
 import com.goods.client.data.repository.collection_status.CollectionStatusRepositoryImpl
 import com.goods.client.data.repository.create_asset.CreateAssetRepositoryImpl
+import com.goods.client.data.repository.delete_asset.DeleteAssetRepositoryImpl
 import com.goods.client.data.repository.detail_asset.DetailAssetRepositoryImpl
 import com.goods.client.data.repository.update_asset.UpdateAssetRepositoryImpl
 import com.goods.client.databinding.ActivityAddAssetBinding
@@ -26,8 +27,8 @@ import com.goods.client.ui.custom_components.InputDropdownView
 import com.goods.client.ui.custom_components.InputTextView
 import com.goods.client.ui.custom_components.PopUpNotificationListener
 import com.goods.client.ui.custom_components.showPopUpNitification
-import com.goods.client.ui.viewmodels.adddetailupdate_asset.AddDetailUpdateAssetViewModel
-import com.goods.client.ui.viewmodels.adddetailupdate_asset.AddDetailUpdateAssetViewModelFactory
+import com.goods.client.ui.viewmodels.crud_asset.CrudAssetViewModel
+import com.goods.client.ui.viewmodels.crud_asset.CrudAssetViewModelFactory
 import com.goods.client.utils.Extensions.Companion.retrieveListItemDropdownLocation
 import com.goods.client.utils.Extensions.Companion.retrieveListItemDropdownStatus
 
@@ -35,7 +36,7 @@ class AddAssetActivity : AppCompatActivity() {
     private val TAG = AddAssetActivity::class.java.simpleName
     private lateinit var binding: ActivityAddAssetBinding
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var addDetailUpdateAssetViewModel: AddDetailUpdateAssetViewModel
+    private lateinit var crudAssetViewModel: CrudAssetViewModel
     private var userToken = ""
 
     private var retrievedAssetName: String?= null
@@ -59,12 +60,13 @@ class AddAssetActivity : AppCompatActivity() {
         val createAssetRepository = CreateAssetRepositoryImpl(apiService)
         val detailAssetRepository = DetailAssetRepositoryImpl(apiService)
         val updateAssetRepository = UpdateAssetRepositoryImpl(apiService)
+        val deleteAssetRepository = DeleteAssetRepositoryImpl(apiService)
 
-        val factory = AddDetailUpdateAssetViewModelFactory(collectionStatusRepository,
+        val factory = CrudAssetViewModelFactory(collectionStatusRepository,
             collectionLocationRepository, createAssetRepository, detailAssetRepository,
-            updateAssetRepository)
+            updateAssetRepository, deleteAssetRepository)
 
-        addDetailUpdateAssetViewModel = ViewModelProvider(this@AddAssetActivity, factory)[AddDetailUpdateAssetViewModel::class.java]
+        crudAssetViewModel = ViewModelProvider(this@AddAssetActivity, factory)[CrudAssetViewModel::class.java]
 
         observeStatus()
         setUpActionbar()
@@ -72,15 +74,15 @@ class AddAssetActivity : AppCompatActivity() {
     }
 
     private fun observeStatus(){
-        addDetailUpdateAssetViewModel.isLoading.observe(this@AddAssetActivity, {
+        crudAssetViewModel.isLoading.observe(this@AddAssetActivity, {
             setLayoutForLoading(it)
         })
 
-        addDetailUpdateAssetViewModel.isFail.observe(this@AddAssetActivity, {
+        crudAssetViewModel.isFail.observe(this@AddAssetActivity, {
             Toast.makeText(this@AddAssetActivity, "Unable to retrieve data...", Toast.LENGTH_SHORT).show()
         })
 
-        addDetailUpdateAssetViewModel.isUnauthorized.observe(this@AddAssetActivity, {
+        crudAssetViewModel.isUnauthorized.observe(this@AddAssetActivity, {
             if(it){
                 setLayoutForPopUp(true)
                 showPopUpNitification(
@@ -99,7 +101,7 @@ class AddAssetActivity : AppCompatActivity() {
             }
         })
 
-        addDetailUpdateAssetViewModel.isCreateAssetFail.observe(this@AddAssetActivity, {
+        crudAssetViewModel.isCreateAssetFail.observe(this@AddAssetActivity, {
             if(it){
                 setLayoutForPopUp(true)
                 showPopUpNitification(
@@ -115,7 +117,7 @@ class AddAssetActivity : AppCompatActivity() {
             }
         })
 
-        addDetailUpdateAssetViewModel.createUpdateAssetResponse2.observe(this@AddAssetActivity, { response->
+        crudAssetViewModel.createUpdateAssetResponse2.observe(this@AddAssetActivity, { response->
             Log.d(TAG, "createAssetResponse: $response")
             if(response != null){
                 setLayoutForPopUp(true)
@@ -152,10 +154,10 @@ class AddAssetActivity : AppCompatActivity() {
 
         userToken = sharedPreferences.getString(Constants.PREFERENCES.TOKEN_KEY, "")!!
 
-        addDetailUpdateAssetViewModel.getStatusCollection(userToken)
-        addDetailUpdateAssetViewModel.getLocationCollection(userToken)
+        crudAssetViewModel.getStatusCollection(userToken)
+        crudAssetViewModel.getLocationCollection(userToken)
 
-        addDetailUpdateAssetViewModel.collectionStatusResponse.observe(this@AddAssetActivity, { response->
+        crudAssetViewModel.collectionStatusResponse.observe(this@AddAssetActivity, { response->
             Log.d(TAG, "collection Status Response: $response")
             val collectionItemDropdown = retrieveListItemDropdownStatus(response.results)
 
@@ -190,7 +192,7 @@ class AddAssetActivity : AppCompatActivity() {
             }
         })
 
-        addDetailUpdateAssetViewModel.collectionLocationResponse.observe(this@AddAssetActivity, { response->
+        crudAssetViewModel.collectionLocationResponse.observe(this@AddAssetActivity, { response->
             Log.d(TAG, "collection Location response : $response")
 
             val collectionItemDropdown = retrieveListItemDropdownLocation(response.results)
@@ -271,7 +273,7 @@ class AddAssetActivity : AppCompatActivity() {
                 }
                 else ->{
                     //If all forms has alredy filled out, then hitting endpoint happens here
-                    addDetailUpdateAssetViewModel.createAsset(userToken, retrievedAssetName!!, retrievedStatusId!!, retrievedLocationId!!)
+                    crudAssetViewModel.createAsset(userToken, retrievedAssetName!!, retrievedStatusId!!, retrievedLocationId!!)
                 }
             }
 

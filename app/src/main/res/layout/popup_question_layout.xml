@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingVertical="15dp"
+    android:paddingHorizontal="10dp"
+    android:background="@drawable/bg_circular_rectangle_white">
+
+    <TextView
+        android:id="@+id/tvPopUpTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="16sp"
+        android:fontFamily="@font/redhatdisplay_medium"
+        android:textColor="@color/void_century"
+        android:text="@string/popupDummyQuestionTitle"/>
+
+    <TextView
+        android:id="@+id/tvPopUpDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPopUpTitle"
+        android:layout_marginTop="10dp"
+        android:textSize="14sp"
+        android:fontFamily="@font/redhatdisplay_regular"
+        android:textColor="@color/void_century"
+        android:textAlignment="center"
+        android:lines="2"
+        android:text="@string/popupDummyQuestionDesc"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnNegative"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingVertical="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnPositive"
+        app:layout_constraintTop_toBottomOf="@+id/tvPopUpDesc"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="12dp"
+        android:textSize="14sp"
+        android:fontFamily="@font/redhatdisplay_medium"
+        android:textColor="@color/grenadine_pink"
+        android:text="@string/btnPopupDummyQuestionNegative"
+        android:textAllCaps="false"
+        android:background="@drawable/bg_circular_rectangle_grenadine_white"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnPositive"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingVertical="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnNegative"
+        app:layout_constraintTop_toBottomOf="@+id/tvPopUpDesc"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="12dp"
+        android:textSize="14sp"
+        android:fontFamily="@font/redhatdisplay_medium"
+        android:textColor="@color/white"
+        android:text="@string/btnPopupDummyQuestionPositive"
+        android:textAllCaps="false"
+        android:background="@drawable/primary_background"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
