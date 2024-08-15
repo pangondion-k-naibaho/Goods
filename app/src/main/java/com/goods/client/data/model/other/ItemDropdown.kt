@@ -5,6 +5,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class ItemDropdown(
+    var id: String?= "",
     var name: String?= "",
     var isSelected: Boolean = false
 ): Parcelable

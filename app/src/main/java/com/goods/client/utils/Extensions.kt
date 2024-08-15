@@ -46,8 +46,11 @@ class Extensions {
             val arrListItemDropdown = ArrayList<ItemDropdown>()
 
             for(i in input.indices){
-                val itemDropdown = ItemDropdown()
-                itemDropdown.name = input[i].name
+                val itemDropdown = ItemDropdown(
+                    id = input[i].id,
+                    name = input[i].name
+                )
+                arrListItemDropdown.add(itemDropdown)
             }
 
             return arrListItemDropdown
@@ -57,8 +60,11 @@ class Extensions {
             val arrListItemDropdown = ArrayList<ItemDropdown>()
 
             for(i in input.indices){
-                val itemDropdown = ItemDropdown()
-                itemDropdown.name = input[i].name
+                val itemDropdown = ItemDropdown(
+                    id = input[i].id,
+                    name = input[i].name
+                )
+                arrListItemDropdown.add(itemDropdown)
             }
 
             return arrListItemDropdown

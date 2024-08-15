@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.view.Display
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
@@ -23,7 +24,7 @@ class InputDropdownView: ConstraintLayout {
     private lateinit var binding: DropdownLayoutBinding
 
     private var dropdownListener: DropdownListener?= null
-    private var listDropdown: List<ItemDropdown>?= null
+    private var listDropdown: List<ItemDropdown> = ArrayList()
     private lateinit var popupBinding: DropdownPopupLayoutBinding
     private lateinit var popUpWindow: PopupWindow
     private var isDropdownShown: Boolean = false
@@ -53,36 +54,36 @@ class InputDropdownView: ConstraintLayout {
 
         binding.clDropdownContent.setOnClickListener {
             dropdownListener?.onDropdownClicked()
-            if(listDropdown!!.size > 0){
-                binding.spContent.performClick()
+            if(listDropdown.size > 0){
                 if(!popUpWindow.isShowing){
+                    binding.spContent.performClick()
                     showPopUp()
                 }else{
                     dismissPopUp()
                 }
             }
-            isDropdownShown = !isDropdownShown
+//            isDropdownShown = !isDropdownShown
         }
 
         binding.tvSelectedItem.setOnClickListener {
             dropdownListener?.onDropdownClicked()
-            if(listDropdown!!.size > 0){
-                binding.spContent.performClick()
+            if(listDropdown.size > 0){
                 if(!popUpWindow.isShowing){
+                    binding.spContent.performClick()
                     showPopUp()
                 }else{
                     dismissPopUp()
                 }
             }
-            isDropdownShown = !isDropdownShown
+//            isDropdownShown = !isDropdownShown
         }
 
         val popUpView = LayoutInflater.from(mContext).inflate(R.layout.dropdown_popup_layout, null)
         popupBinding = DropdownPopupLayoutBinding.bind(popUpView)
-        val displayMetrics = DisplayMetrics()
-        val displayService = mContext.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
-
-        displayService.getDisplay(Display.DEFAULT_DISPLAY).getRealMetrics(displayMetrics)
+//        val displayMetrics = DisplayMetrics()
+//        val displayService = mContext.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
+//
+//        displayService.getDisplay(Display.DEFAULT_DISPLAY).getRealMetrics(displayMetrics)
 
         popUpWindow = PopupWindow(
             popUpView,
@@ -141,6 +142,12 @@ class InputDropdownView: ConstraintLayout {
 
     fun setError(){
         binding.clDropdownContent.background = ContextCompat.getDrawable(mContext, R.drawable.bg_rectangle_sunburnt_cyclops_iwhite)
+        binding.tvDropdownWarning.visibility = View.VISIBLE
+    }
+
+    fun setNormal(){
+        binding.clDropdownContent.background = ContextCompat.getDrawable(mContext, R.drawable.bg_circular_rectangle_electriceel_iwhite)
+        binding.tvDropdownWarning.visibility = View.GONE
     }
 
     fun setTitle(title: String){

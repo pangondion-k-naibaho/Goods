@@ -144,7 +144,16 @@ class InputTextView: ConstraintLayout {
                     }
                 }
                 else ->{
-
+                    onFocusChangeListener = View.OnFocusChangeListener{_, hasFocus ->
+                        if(!hasFocus){
+                            if(text.isEmpty()){
+                                binding.etInput.background = ContextCompat.getDrawable(mContext, R.drawable.bg_rectangle_sunburnt_cyclops_iwhite)
+                                binding.tvWarning.visibility = View.VISIBLE
+                            }else{
+                                binding.tvWarning.visibility = View.GONE
+                            }
+                        }
+                    }
                 }
             }
 

@@ -199,7 +199,6 @@ class DashboardActivity : AppCompatActivity(), FragmentsDashboardCommunicator{
         binding.btnInputAsset.setOnClickListener {
             startActivity(AddAssetActivity.newIntent(this@DashboardActivity))
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-            finish()
         }
     }
 

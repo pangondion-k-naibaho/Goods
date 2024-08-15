@@ -26,6 +26,10 @@
     <string name="popupLogoutFailedDesc">Unable to log you out at this time.\nPlease try again later.</string>
     <string name="popupUnauthorizedTitle">Session has Expired</string>
     <string name="popupUnauthorizedDesc">Please log in to continue</string>
+    <string name="popupCreateAssetSuccessTitle">Success!</string>
+    <string name="popipCreateAssetSuccessDesc">Data has been submitted.</string>
+    <string name="popupCreateAssetFailedTitle">Error!</string>
+    <string name="popupCreateAssetFailedDesc">Submission Failed. Please try again later</string>
     <string name="tvListAssetTitle">List Asset</string>
     <string name="tvAssetNameTitle">Asset Name</string>
     <string name="tvDummyAssetName">Dummy Aset</string>
@@ -45,6 +49,11 @@
     <string name="tvDummyDropdownOption">Dummy Option</string>
     <string name="tvDummyDropdownTitle">Dummy Title</string>
     <string name="btnTxtSubmit">Submit</string>
+    <string name="dropdownTitleStatus">Status</string>
+    <string name="dropdownTitleLocation">Location</string>
     <string name="dropdownHintStatus">Select status</string>
     <string name="dropdownHintLocation">Select location</string>
+    <string name="tvInputAssetName">Asset Name</string>
+    <string name="tvInputHintAssetName">Input Name</string>
+    <string name="cabInputAssetTitle">Input Asset</string>
 </resources>

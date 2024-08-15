@@ -1,5 +1,6 @@
 package com.goods.client.data.remote
 
+import com.goods.client.data.model.request.asset.CreateAssetRequest
 import com.goods.client.data.model.request.login.LoginRequest
 import com.goods.client.data.model.request.token.TokenRequest
 import com.goods.client.data.model.response.all_asset.AllAssetResponse
@@ -7,6 +8,7 @@ import com.goods.client.data.model.response.asset_by_location.CollectionAssetLoc
 import com.goods.client.data.model.response.asset_by_status.CollectionAssetStatusResponse
 import com.goods.client.data.model.response.collection_location.CollectionLocationResponse
 import com.goods.client.data.model.response.collection_status.CollectionStatusResponse
+import com.goods.client.data.model.response.create_asset.CreateAssetResponse
 import com.goods.client.data.model.response.login.LoginResponse
 import com.goods.client.data.model.response.logout.LogoutResponse
 import com.goods.client.data.model.response.profile.ProfileResponse
@@ -48,6 +50,18 @@ interface ApiService {
         @Query("search") search: String,
     ): Response<AllAssetResponse>
 
+    @POST("asset/")
+    suspend fun createAsset(
+        @Header("Authorization") authToken: String,
+        @Body createAssetRequest: CreateAssetRequest
+    ): Response<String>
+
+    @POST("asset/")
+    suspend fun createAsset2(
+        @Header("Authorization") authToken: String,
+        @Body createAssetRequest: CreateAssetRequest
+    ): Response<CreateAssetResponse>
+
     @GET("home/agg-asset-by-status/")
 
     suspend fun getAssetByStatus(
@@ -68,4 +82,6 @@ interface ApiService {
     suspend fun getCollectionLocation(
         @Header("Authorization") authToken: String
     ): Response<CollectionLocationResponse>
+
+
 }
