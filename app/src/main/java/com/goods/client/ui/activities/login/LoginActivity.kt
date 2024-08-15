@@ -82,45 +82,6 @@ class LoginActivity : AppCompatActivity() {
                 backgroundImage = R.drawable.ic_fail,
             )
         })
-
-//        loginViewModel.errorMessage.observe(this@LoginActivity, {
-//            Log.e(TAG, "error: $it")
-//        })
-
-//        loginViewModel.loginResult.observe(this@LoginActivity, { result->
-//            if(result.isSuccess){
-//                val loginResponse = result.getOrNull()
-//                val appPreferences = this@LoginActivity.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
-//                val editor = appPreferences.edit()
-//                editor.putString(TOKEN_KEY, loginResponse!!.token)
-//                editor.putString(EMAIL_KEY, loginResponse.email)
-//                editor.putString(USERNAME_KEY, loginResponse.username)
-//                editor.apply()
-//                if(editor.commit()){
-//                    setLayoutForPopUp(true)
-//                    this@LoginActivity.showPopUpNitification(
-//                        textTitle = getString(R.string.popupLoginSuccessTitle),
-//                        textDesc = getString(R.string.popupLoginSuccessDesc),
-//                        backgroundImage = R.drawable.ic_success,
-//                        listener = object: PopUpNotificationListener{
-//                            override fun onPopUpClosed() {
-//                                startActivity(DashboardActivity.newIntent(this@LoginActivity))
-//                                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-//                                finish()
-//                            }
-//                        }
-//                    )
-//                }
-//            }else{
-////                val codeResult = result.getOrNull().
-//                setLayoutForPopUp(true)
-//                this@LoginActivity.showPopUpNitification(
-//                    textTitle = getString(R.string.popupLoginFailedTitle),
-//                    textDesc = getString(R.string.popupLoginFailedDesc),
-//                    backgroundImage = R.drawable.ic_fail,
-//                )
-//            }
-//        })
     }
 
     private fun initView(){

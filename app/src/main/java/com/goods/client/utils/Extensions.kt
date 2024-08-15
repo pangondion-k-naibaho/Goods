@@ -3,8 +3,6 @@ package com.goods.client.utils
 import android.app.Activity
 import android.content.Context
 import android.util.DisplayMetrics
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
 import com.goods.client.data.model.other.ItemDropdown
 import com.goods.client.data.model.response.asset_by_location.CollectionAssetLocationResponse
 import com.goods.client.data.model.response.asset_by_location.LocationResponse
@@ -12,7 +10,6 @@ import com.goods.client.data.model.response.asset_by_status.CollectionAssetStatu
 import com.goods.client.data.model.response.asset_by_status.StatusResponse
 import java.text.SimpleDateFormat
 import java.util.Locale
-import java.util.concurrent.TimeUnit
 
 class Extensions {
     companion object{

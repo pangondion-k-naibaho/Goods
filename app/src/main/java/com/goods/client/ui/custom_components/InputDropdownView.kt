@@ -1,10 +1,7 @@
 package com.goods.client.ui.custom_components
 
 import android.content.Context
-import android.hardware.display.DisplayManager
 import android.util.AttributeSet
-import android.util.DisplayMetrics
-import android.view.Display
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

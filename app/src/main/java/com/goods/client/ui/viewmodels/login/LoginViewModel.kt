@@ -24,14 +24,6 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     private var _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
-//    fun loginUser(email: String, password: String) {
-//        _isLoading.value = true
-//        viewModelScope.launch {
-//            val result = loginRepository.login(email, password)
-//            _loginResult.value = result
-//            _isLoading.value = false
-//        }
-//    }
 
     fun loginUser(email: String, password: String) {
         _isLoading.value = true
@@ -40,11 +32,9 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
             if (result.isSuccess) {
                 _loginResponse.value = result.getOrNull()
                 Log.d(TAG, "Success")
-//                _errorMessage.value = "no error message"
             } else {
                 _isFail.value = true
                 Log.e(TAG, "error message :${result.exceptionOrNull()?.message}")
-//                _errorMessage.value = result.exceptionOrNull()?.message
             }
             _isLoading.value = false
         }

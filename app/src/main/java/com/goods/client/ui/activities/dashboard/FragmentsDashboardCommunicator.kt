@@ -7,5 +7,4 @@ interface FragmentsDashboardCommunicator {
 
     fun updateProfile(username: String, email: String)
 
-//    fun setWarning()
 }

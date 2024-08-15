@@ -29,7 +29,6 @@ import com.goods.client.ui.custom_components.PopUpNotificationListener
 import com.goods.client.ui.custom_components.showPopUpNitification
 import com.goods.client.ui.viewmodels.home.HomeViewModel
 import com.goods.client.ui.viewmodels.home.HomeViewModelFactory
-import com.goods.client.utils.Extensions.Companion.getHalfScreenWidthInFloat
 import com.goods.client.utils.Extensions.Companion.retrieveValueBasedOnLocation
 import com.goods.client.utils.Extensions.Companion.retrieveValuebasedOnStatus
 

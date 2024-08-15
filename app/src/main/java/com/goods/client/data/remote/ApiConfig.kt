@@ -2,8 +2,6 @@ package com.goods.client.data.remote
 
 import com.goods.client.data.Constants.URL_CONSTANTS.Companion.API_URL
 import de.hdodenhof.circleimageview.BuildConfig
-import okhttp3.Credentials
-import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
